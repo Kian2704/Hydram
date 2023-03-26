@@ -1,5 +1,6 @@
 package main;
 
+import javafx.beans.value.ObservableValue;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 
@@ -12,6 +13,14 @@ public class Game {
 	public static Pane gameScene;
 	private Pacman pacman;
 
+	public boolean isGameOver()
+	{
+		if(isGameOver)
+			return true;
+		return false;
+	}
+	
+	
 	private void play()
 	{
 		Runnable task = new Runnable()
@@ -29,7 +38,7 @@ public class Game {
 			        while(!isGameOver)
 			        {
 			        	try {
-							Thread.sleep(30);
+							Thread.sleep(15);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -42,35 +51,12 @@ public class Game {
 				gameThread.start();
 
 	}
-	private void enableControl()
-	{
-		Main.stage.getScene().setOnKeyPressed(e -> {
-		    if (e.getCode() == KeyCode.DOWN) {
-		    	pacman.moveDirection = 0;
-		    } else if(e.getCode() == KeyCode.LEFT)
-		    {
-		    	pacman.moveDirection = 1;
-		    } else if(e.getCode() == KeyCode.UP)
-		    {
-		    	pacman.moveDirection = 2;
-		    }else if(e.getCode() == KeyCode.RIGHT)
-		    {
-		    	pacman.moveDirection = 3;
-		    }
-		});
-	}
 	public Game()
 	{
 		
 		pacman = new Pacman();
 		gameScene.getChildren().add(pacman);
-		pacman.setX(Map.pacmanSpawn.x);
-		pacman.setY(Map.pacmanSpawn.y);
-		for(int i = 0; i < Map.wallTiles.length; i++)
-		{
-			System.out.println(Map.wallTiles[i]);
-		}
-		enableControl();
+		pacman.enableControl();
 		play();
 	}
 }
