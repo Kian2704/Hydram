@@ -1,24 +1,18 @@
 package main;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.KeyCode;
-import javafx.scene.Group;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
 
 public class Scenes {
 	
@@ -27,16 +21,12 @@ public class Scenes {
 	
 	public static void main(String[] args) {
 
-	}
-	
-	public static void setGameScene(Stage primaryStage)
-	{
-		primaryStage.setScene(new Scene(Scenes.getGameScene(primaryStage), 1200, 800));
+		Main.main(args);
 	}
 	
 	public static void setMainMenuScene(Stage primaryStage)
 	{
-		primaryStage.setScene(new Scene(Scenes.getMainMenu(primaryStage), 1200, 800));
+		primaryStage.setScene(new Scene(Scenes.getMainMenu(primaryStage), Main.screenWidth, Main.screenHeight));
 	}
 	
 	public static VBox getMainMenu(Stage primaryStage)
@@ -46,17 +36,22 @@ public class Scenes {
     	final Font headlineFont = Font.font("Courier New",FontWeight.BLACK,30);
 		Button btnSettings = new Button();
         Button btnPlay = new Button();
+        Button btnMapEdit = new Button();
         Button btnClose = new Button();
         Label headline = new Label("Main Menu");
         btnPlay.setText("Start Game");
+        btnMapEdit.setText("Map Editor(DEV)");
+        btnMapEdit.setStyle("-fx-background-color: red; "); 
         btnSettings.setText("Settings");
         btnClose.setText("Exit Game");
         headline.setFont(headlineFont);
         btnPlay.setFont(buttonFont);
+        btnMapEdit.setFont(buttonFont);
         btnSettings.setFont(buttonFont);
+        btnClose.setFont(buttonFont);
         btnSettings.setDisable(true);
         btnSettings.setTooltip(new Tooltip("Hello"));
-        btnClose.setFont(buttonFont);
+        
         
         btnClose.setOnAction(new EventHandler<ActionEvent>() {
         	 
@@ -71,28 +66,99 @@ public class Scenes {
             @Override
             public void handle(ActionEvent event) {
             	setGameScene(primaryStage);
+            		Game game = new Game();	
+            }
+        }); 
+        btnMapEdit.setOnAction(new EventHandler<ActionEvent>() {
+       	 
+            @Override
+            public void handle(ActionEvent event) {
+            	setEditorScene(primaryStage);
             }
         });
-        
         
         VBox mainMenu = new VBox();
         mainMenu.setSpacing(20);
         mainMenu.setAlignment(Pos.CENTER);
         mainMenu.getChildren().addAll(headline,btnPlay,btnSettings,btnClose);
+        mainMenu.getChildren().addAll(btnMapEdit);
         
         return mainMenu;
 	}
 	
-	public static VBox getGameScene(Stage primaryStage)
+	
+	public static void setGameScene(Stage primaryStage)
 	{
+		
 		primaryStage.setTitle("PacMan - Game");
-		VBox gameScene = new VBox();
-		Label headline = new Label("This is the game!");
-		Group group = new Group();
+		Pane gameScene = new Pane();
+		Game.gameScene = gameScene;
+		int stageHeight = (int)Main.screenHeight;
+		int stageWidth = (int)Main.screenWidth;
+		int numberTileCols = (int)(stageWidth / Game.tileSize);
+		int numberTileRows = (int)(stageHeight / Game.tileSize);
+		Map.tiles = new Tile[numberTileCols][numberTileRows];
+		Map.wallTiles = new Tile[numberTileCols*numberTileRows];
+		//Game.loadMap(gameScene,numberTileCols,numberTileRows);
 		
 		
-		gameScene.getChildren().addAll(headline,group);
-		return gameScene;
+		Map.getMap(numberTileCols, numberTileRows);
+		Map.loadMap(gameScene);
+		int index = 0;
+		for(int i = 0; i < numberTileCols;i++)
+		{
+			for(int j = 0; j < numberTileRows;j++)
+			{
+
+				Debug.tileDebugEventHandler(Map.tiles[i][j]);
+					Map.wallTiles[index++] = Map.tiles[i][j];
+			}
+		}
+		primaryStage.setScene(new Scene(gameScene, Main.screenWidth, Main.screenHeight));
+		
+	}
+	
+	public static void setEditorScene(Stage primaryStage)
+	{
+		primaryStage.setTitle("PacMan - Map Editor");
+		Pane gameScene = new Pane();
+
+		
+		int stageHeight = (int)Main.screenHeight;
+		int stageWidth = (int)Main.screenWidth;
+		int numberTileCols = (int)(stageWidth / Game.tileSize);
+		int numberTileRows = (int)(stageHeight / Game.tileSize);
+		Map.tiles = new Tile[numberTileCols][numberTileRows];
+		Pacman pacman = new Pacman();
+		//Game.loadMap(gameScene,numberTileCols,numberTileRows);
+		
+		for(int i = 0; i < numberTileRows;i++)
+		{
+			for(int j = 0; j < numberTileCols;j++)
+			{
+				Tile tile;
+				
+				if(j == 0 || i==0 || j==(numberTileCols - 1) || i == (numberTileRows - 1))
+				{
+					tile = new Tile(Game.tileSize*j,Game.tileSize*i,Game.tileSize,Game.tileSize,1);
+				} else
+				{
+					tile = new Tile(Game.tileSize*j,Game.tileSize*i,Game.tileSize,Game.tileSize,0);
+				}
+				Map.tiles[j][i] = tile;
+				tile.col = j;
+				tile.row = i;
+				MapEditor.makeEditable(tile);
+				
+				
+				
+				gameScene.getChildren().addAll(tile);	
+			}
+		}
+
+		gameScene.getChildren().addAll(pacman);
+		primaryStage.setScene(new Scene(gameScene, Main.screenWidth, Main.screenHeight));
+		MapEditor.start(primaryStage.getScene());
 	}
 
 }
