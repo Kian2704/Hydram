@@ -1,17 +1,23 @@
 package main;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.ImagePattern;
 
-public class Pacman extends Entity {
+public class Pacman extends MovingEntity {
 
 	public Pacman()
 	{
-		super();
-		Image img = new Image("file:graphics/pacman.gif");
-		setImage(img);
+		setFitHeight(Game.tileSize*sizeFactor);
+		height = getFitHeight();
+		setFitWidth(Game.tileSize*sizeFactor);
+		width = getFitWidth();
+		
+		texture = new Image("file:graphics/pacman.gif");
+		setImage(texture);
+		setScaleX(-1);
 		setX(Map.pacmanSpawn.x);
-		setY(Map.pacmanSpawn.y+(1-sizeFactor));
+		setY(Map.pacmanSpawn.y+velocity);//TODO rausfinden wieso +3 nötig
+		type = 0;
+		enableControl();
 	}
 	
 	

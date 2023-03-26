@@ -15,6 +15,7 @@ public class Main extends Application {
 	static final double screenWidth = 1200;
 	static final double screenHeight = 800;
 	static Stage stage;
+	static Game currentGame;
 	
 	
     public static void main(String[] args) {

@@ -9,8 +9,9 @@ import javafx.scene.layout.Pane;
 
 public class Map {
 	public static Tile[][] tiles; //cols - rows
-	public static Tile[] wallTiles;
+	public static Tile[] tiles1d;
 	public static Vec2 pacmanSpawn;
+	public static int numberPathTiles;
 	public static Vec2 ghostSpawn;
 	public static Tile[][] getMap(int cols, int rows)
 	{
@@ -41,8 +42,16 @@ public class Map {
 
 		        	switch(line.charAt(i))
 		        	{ 
-		        	case 'X' : tiles[i][count] = new Tile(Game.tileSize*i,Game.tileSize*count,Game.tileSize,Game.tileSize,0);break;
-		        	case 'W' : tiles[i][count] = new Tile(Game.tileSize*i,Game.tileSize*count,Game.tileSize,Game.tileSize,1);break;
+		        	case 'X' : {
+		        		tiles[i][count] = new Tile(Game.tileSize*i,Game.tileSize*count,Game.tileSize,Game.tileSize,1);
+		        		tiles[i][count].setEnt(new Point());
+		        		break;
+		        	}
+		        	case 'N' : {
+		        		tiles[i][count] = new Tile(Game.tileSize*i,Game.tileSize*count,Game.tileSize,Game.tileSize,4);
+		        		break;
+		        	}
+		        	case 'W' : tiles[i][count] = new Tile(Game.tileSize*i,Game.tileSize*count,Game.tileSize,Game.tileSize,0);break;
 		        	case 'P' : {
 		        		tiles[i][count] = new Tile(Game.tileSize*i,Game.tileSize*count,Game.tileSize,Game.tileSize,3);
 		        		pacmanSpawn = new Vec2(tiles[i][count].getX(),tiles[i][count].getY());
@@ -70,12 +79,15 @@ public class Map {
 	
 	public static void loadMap(Pane gameScene)
 	{
-		System.out.println(tiles[0].length + " " + tiles.length);
 		for(int i = 0; i < tiles[0].length; i++)
 		{
 			for(int j = 0; j < tiles.length;j++)
 			{
 				gameScene.getChildren().addAll(tiles[j][i]);
+				if(tiles[j][i].getEnt() != null)
+				{
+					gameScene.getChildren().addAll(tiles[j][i].getEnt());
+				}
 			}
 		}
 		

@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -67,6 +66,7 @@ public class Scenes {
             public void handle(ActionEvent event) {
             	setGameScene(primaryStage);
             		Game game = new Game();	
+            		Main.currentGame = game;
             }
         }); 
         btnMapEdit.setOnAction(new EventHandler<ActionEvent>() {
@@ -98,7 +98,7 @@ public class Scenes {
 		int numberTileCols = (int)(stageWidth / Game.tileSize);
 		int numberTileRows = (int)(stageHeight / Game.tileSize);
 		Map.tiles = new Tile[numberTileCols][numberTileRows];
-		Map.wallTiles = new Tile[numberTileCols*numberTileRows];
+		Map.tiles1d = new Tile[numberTileCols*numberTileRows];
 		//Game.loadMap(gameScene,numberTileCols,numberTileRows);
 		
 		
@@ -110,8 +110,14 @@ public class Scenes {
 			for(int j = 0; j < numberTileRows;j++)
 			{
 
+				if(Map.tiles[i][j].type == 1)
+				{
+					Map.numberPathTiles++;
+					
+					
+				}
 				Debug.tileDebugEventHandler(Map.tiles[i][j]);
-					Map.wallTiles[index++] = Map.tiles[i][j];
+					Map.tiles1d[index++] = Map.tiles[i][j];
 			}
 		}
 		primaryStage.setScene(new Scene(gameScene, Main.screenWidth, Main.screenHeight));
@@ -129,7 +135,6 @@ public class Scenes {
 		int numberTileCols = (int)(stageWidth / Game.tileSize);
 		int numberTileRows = (int)(stageHeight / Game.tileSize);
 		Map.tiles = new Tile[numberTileCols][numberTileRows];
-		Pacman pacman = new Pacman();
 		//Game.loadMap(gameScene,numberTileCols,numberTileRows);
 		
 		for(int i = 0; i < numberTileRows;i++)
@@ -140,10 +145,10 @@ public class Scenes {
 				
 				if(j == 0 || i==0 || j==(numberTileCols - 1) || i == (numberTileRows - 1))
 				{
-					tile = new Tile(Game.tileSize*j,Game.tileSize*i,Game.tileSize,Game.tileSize,1);
+					tile = new Tile(Game.tileSize*j,Game.tileSize*i,Game.tileSize,Game.tileSize,0);
 				} else
 				{
-					tile = new Tile(Game.tileSize*j,Game.tileSize*i,Game.tileSize,Game.tileSize,0);
+					tile = new Tile(Game.tileSize*j,Game.tileSize*i,Game.tileSize,Game.tileSize,1);
 				}
 				Map.tiles[j][i] = tile;
 				tile.col = j;
@@ -156,7 +161,6 @@ public class Scenes {
 			}
 		}
 
-		gameScene.getChildren().addAll(pacman);
 		primaryStage.setScene(new Scene(gameScene, Main.screenWidth, Main.screenHeight));
 		MapEditor.start(primaryStage.getScene());
 	}
