@@ -6,7 +6,7 @@ public class MovingEntity extends Entity{
 	
 	protected int moveDirection = 1;
 	protected int nextMoveDirection = 1;
-	public static final double velocity = 20;
+	//public static final double velocity = 20; TODO non functional. Needs new implementation
 	//TODO detectCollision y & x in one function (if statement for nextBounds)
 	//true = no collision
 	protected boolean noCollisionY(int collider, double y)//collider : 0 = wall, 1 = entity
@@ -16,7 +16,7 @@ public class MovingEntity extends Entity{
 		
 		for(int i = 0; i < Map.tiles1d.length;i++)
 		{
-			BoundingBox nextBounds = new BoundingBox(getX(),y,width,0.1);
+			BoundingBox nextBounds = new BoundingBox(getLayoutX(),y,width,0.1);
 			
 			if (collider == 0 && (Map.tiles1d[i].type == 0) && nextBounds.intersects(Map.tiles1d[i].getBoundsInParent()))
 			{	
@@ -46,7 +46,7 @@ public class MovingEntity extends Entity{
 	{
 		for(int i = 0; i < Map.tiles1d.length;i++)
 		{
-			BoundingBox nextBounds = new BoundingBox(x,getY(),0.1,height);
+			BoundingBox nextBounds = new BoundingBox(x,getLayoutY(),0.1,height);
 
 			if ((collider == 0) && (Map.tiles1d[i].type == 0) && nextBounds.intersects(Map.tiles1d[i].getBoundsInParent()))
 			{	
@@ -73,18 +73,19 @@ public class MovingEntity extends Entity{
 	
 	public void checkEntityCollision()
 	{
-		noCollisionX(1,getX());
-		noCollisionY(1,getY());
+		noCollisionX(1,getLayoutX());
+		noCollisionY(1,getLayoutY());
 	}
 	
 	public void move()
 	{
+		
 		if (moveDirection != nextMoveDirection)
 		{
 			switch(nextMoveDirection) //changes move direction when possible
 			{
 			case 0: {
-				if(noCollisionY(0,getY()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight()))
+				if(noCollisionY(0,getLayoutY()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight()))
 				{
 					moveDirection = nextMoveDirection;
 					setRotate(90);
@@ -96,7 +97,7 @@ public class MovingEntity extends Entity{
 			
 			case 1: 
 			{
-				if(noCollisionX(0,getX()-((Game.tileSize-Game.tileSize*sizeFactor-1))))
+				if(noCollisionX(0,getLayoutX()-((Game.tileSize-Game.tileSize*sizeFactor-1))))
 				{
 					moveDirection = nextMoveDirection;
 					setRotate(0);
@@ -107,7 +108,7 @@ public class MovingEntity extends Entity{
 				break;	
 			}
 			case 2:	{
-				if(noCollisionY(0,getY()-((Game.tileSize-Game.tileSize*sizeFactor-1))))
+				if(noCollisionY(0,getLayoutY()-((Game.tileSize-Game.tileSize*sizeFactor-1))))
 				{
 					moveDirection = nextMoveDirection;
 					setRotate(270);
@@ -117,7 +118,7 @@ public class MovingEntity extends Entity{
 				break;	
 			}
 			case 3:	{
-				if(noCollisionX(0,getX()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight()))//No idea why ((Game.tileSize-Game.tileSize*sizeFactor-1))
+				if(noCollisionX(0,getLayoutX()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight()))//No idea why ((Game.tileSize-Game.tileSize*sizeFactor-1))
 				{
 					moveDirection = nextMoveDirection;
 					setRotate(0);
@@ -132,44 +133,47 @@ public class MovingEntity extends Entity{
 		switch(moveDirection) //moves player
 		{
 		case 0: {
-			if(noCollisionY(0,getY()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight()))
-			{setY(getY()+1);
-			if(getY() > Game.gameScene.getHeight())
+			if(noCollisionY(0,getLayoutY()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight()))
+			{setLayoutY(getLayoutY()+1);
+			if(getLayoutY() > Game.gameScene.getHeight())
 			{
-				setY(0-height);
+				setLayoutY(0-height);
+				
 				
 			}
 			}break;	
 		}
 		case 1: 
 		{
-			if(noCollisionX(0,getX()-((Game.tileSize-Game.tileSize*sizeFactor-1))))
-			{setX(getX()-1);
-			if(getX() < 0)
+			if(noCollisionX(0,getLayoutX()-((Game.tileSize-Game.tileSize*sizeFactor-1))))
+			{setLayoutX(getLayoutX()-1);
+			if(getLayoutX() < 0)
 			{
-				setX(Game.gameScene.getWidth() + width);
+				setLayoutX(Game.gameScene.getWidth() + width);
 				
 					
 			}
 			}break;
 		}
 		case 2:	{
-			if(noCollisionY(0,getY()-((Game.tileSize-Game.tileSize*sizeFactor-1))))
-			{setY(getY()-1);//TODO remove this
-			if(getY() < 0)
+			if(noCollisionY(0,getLayoutY()-((Game.tileSize-Game.tileSize*sizeFactor-1))))
 			{
-				setY(Game.gameScene.getHeight() + height);
+				setLayoutY(getLayoutY()-1)
+				;
+			if(getLayoutY() < 0)
+			{
+				setLayoutY(Game.gameScene.getHeight() + height);
 				
 			}
 	
 			}break;
 		}
 		case 3:	{
-			if(noCollisionX(0,getX()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight()))
-			{setX(getX()+1);
-			if(getX() > Game.gameScene.getWidth())
+			if(noCollisionX(0,getLayoutX()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight()))
+			{setLayoutX(getLayoutX()+1);
+			if(getLayoutX() > Game.gameScene.getWidth())
 			{
-				setX(0 - width);
+				setLayoutX(0 - width);
 				
 			}
 			

@@ -72,7 +72,6 @@ public class MapEditor {
 	}
 	public static int saveMap(Tile[][] tiles)
 	{
-		System.out.println(tiles[0].length + " " + tiles.length);
         try {  
         	FileChooser fileChooser = new FileChooser();
 	        File file = fileChooser.showSaveDialog(Main.stage);

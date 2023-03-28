@@ -110,6 +110,7 @@ public class Scenes {
 		}
 		Main.stage.setScene(new Scene(gameScene, Main.screenWidth, Main.screenHeight));
 		
+		
 	}
 	
 	

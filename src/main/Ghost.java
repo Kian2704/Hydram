@@ -9,8 +9,8 @@ public class Ghost extends MovingEntity {
 	
 	public Ghost()
 	{
-		setX(Map.ghostSpawn.x);
-		setY(Map.ghostSpawn.y);
+		setLayoutX(Map.ghostSpawn.x);
+		setLayoutY(Map.ghostSpawn.y);
 		id = numberGhosts;
 		numberGhosts++;
 		setFitHeight(Game.tileSize*sizeFactor);
@@ -36,13 +36,13 @@ public class Ghost extends MovingEntity {
 	public void setMoves()
 	{
 		Pacman pacman = Main.currentGame.getPacman();
-		double pacmanX = pacman.getX();
-		double pacmanY = pacman.getY();
-		boolean pacmanIsRight = (pacmanX > getX());
-		boolean pacmanIsUnder = (pacmanY > getY());
+		double pacmanX = pacman.getLayoutX();
+		double pacmanY = pacman.getLayoutY();
+		boolean pacmanIsRight = (pacmanX > getLayoutX());
+		boolean pacmanIsUnder = (pacmanY > getLayoutY());
 		boolean moveXAxis = true;
-		double pacmanDistance = Math.sqrt( ((pacmanX-getX()) * (pacmanX-getX())) + ((pacmanY-getY()) * (pacmanY-getY())) );
-		Vec2 direction = new Vec2(pacmanX-getX(),pacmanY-getY());
+		double pacmanDistance = Math.sqrt( ((pacmanX-getLayoutX()) * (pacmanX-getLayoutX())) + ((pacmanY-getLayoutY()) * (pacmanY-getLayoutY())) );
+		Vec2 direction = new Vec2(pacmanX-getLayoutX(),pacmanY-getLayoutY());
 		if(moveDirection != nextMoveDirection)
 		{
 			

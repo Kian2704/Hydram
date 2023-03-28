@@ -45,7 +45,7 @@ public class Debug extends Game {
 				System.out.println("Tile Type: " + tile.type);
 				if(tile.getEnt() != null)
 				{
-					System.out.println("Tile Point: " + tile.getEnt().getX());
+					System.out.println("Tile Point: " + tile.getEnt().getLayoutX());
 				}
 			}
 		});
@@ -57,7 +57,7 @@ public class Debug extends Game {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				System.out.println("Entity Coordinates: " + ent.getX() + " " + ent.getY());	
+				System.out.println("Entity Coordinates: " + ent.getLayoutX() + " " + ent.getLayoutY());	
 				System.out.println("Entity Type: " + ent.type);
 			}
 		});

@@ -1,17 +1,19 @@
 package main;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
 public class Game {
 
-	private int score = 0;
+	private static int score = 0;
 	public static boolean isGameOver = false;
 	private boolean isPaused = false;
 	private static int level = 1;
 	protected int pointsLeft = 0;
 	public static double tileSize = 40;
+	public static int execution = 0;
 	protected int remainingLives = 1;
 	public Ghost[] ghosts;
 	public final int numberGhosts = 5;
@@ -57,6 +59,11 @@ public class Game {
 		isGameOver = false;
 	}
 	
+	private void resetScore()
+	{
+		score = 0;
+	}
+	
 	
 	private void setRemainingPoints()
 	{ 
@@ -86,13 +93,12 @@ public class Game {
 		{
 			gameOver();
 		}
-		System.out.println(remainingLives);
 	}
 	
 	private void resetPacman()
 	{
-		pacman.setX(Map.pacmanSpawn.x);
-		pacman.setY(Map.pacmanSpawn.y);
+		pacman.setLayoutX(Map.pacmanSpawn.x);
+		pacman.setLayoutY(Map.pacmanSpawn.y);
 		pacman.nextMoveDirection = 1;
 	}
 	
@@ -145,47 +151,54 @@ public class Game {
 	
 	private void play()
 	{
-		Runnable task = new Runnable()
-				{
-				public void run()
-				{
 					
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
-						System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBB");
 						e.printStackTrace();
 					}
-			        while(!isGameOver)
-			        {
-			        	try {
-							Thread.sleep((int)(90/MovingEntity.velocity));
-						} catch (InterruptedException e) {
-							System.out.println("AAAAAAAAAAAAAAAAAAAA");
-							e.printStackTrace();
-						}
-			        	pacman.move();
-			        	for(int i = 0; i < ghosts.length;i++)
+					pacman.enableControl();
+			        
+			        AnimationTimer movement = new AnimationTimer() //Runs code in every Frame of the Game ~60fps
+			        		{
+			        	@Override
+			        	public void handle(long now)
 			        	{
-			        		ghosts[i].setMoves();
-			        	}
+			        		if(isGameOver)
+				        	{
+				        		stopGame();
+				        		stop();
+				        		
+				        	}
+			        		if(!isGameOver)
+			        		{
+			        			pacman.move();
+					        	for(int i = 0; i < ghosts.length;i++)
+					        	{
+					        		ghosts[i].setMoves();
+					 
+					        	}
+					        	pacman.checkEntityCollision();
+			        		}
+			        		
+				        	
+				        	
+			        		
+			        	}};
+			        		
+			        	movement.start();
+			        		
+			        
+			        	
+			        
+			        
+			        
+			        
+			        
+			        
+			        
 
-			        	pacman.checkEntityCollision();
-
-			        }
-			        
-			        
-			        Platform.runLater(() -> {
-			        	stopGame();
-			        });
-			        
-			        
-				}};
-				Thread gameThread = new Thread(task);
-				gameThread.setDaemon(true);
-				gameThread.start();
-
-	}
+			        		}
 	
 	private void stopGame()
 	{
@@ -195,6 +208,10 @@ public class Game {
 		if(won)
 		{
 			levelUp();
+		}else
+		{
+			resetLevel();
+			resetScore();
 		}
         Scenes.setGameOverScene(score,won);
 	}
