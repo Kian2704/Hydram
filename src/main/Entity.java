@@ -14,7 +14,6 @@ public class Entity extends ImageView {
 	
 	protected Entity()
 	{
-		
 	}
 
 }

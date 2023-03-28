@@ -9,30 +9,22 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class Scenes {
 	
+	final static private Font buttonFont = Font.font("Courier New",FontWeight.BOLD,25);
+	final static private Font headlineFont = Font.font("Courier New",FontWeight.BLACK,30);
 	
 	
 	
-	public static void main(String[] args) {
-
-		Main.main(args);
-	}
-	
-	public static void setMainMenuScene(Stage primaryStage)
+	public static void setMainMenuScene()
 	{
-		primaryStage.setScene(new Scene(Scenes.getMainMenu(primaryStage), Main.screenWidth, Main.screenHeight));
-	}
-	
-	public static VBox getMainMenu(Stage primaryStage)
-	{
-		primaryStage.setTitle("PacMan - Main Menu");
-		final Font buttonFont = Font.font("Courier New",FontWeight.BOLD,25);
-    	final Font headlineFont = Font.font("Courier New",FontWeight.BLACK,30);
+		Main.stage.setTitle("PacMan - Main Menu");
+		
 		Button btnSettings = new Button();
         Button btnPlay = new Button();
         Button btnMapEdit = new Button();
@@ -64,7 +56,6 @@ public class Scenes {
         	 
             @Override
             public void handle(ActionEvent event) {
-            	setGameScene(primaryStage);
             		Game game = new Game();	
             		Main.currentGame = game;
             }
@@ -73,7 +64,7 @@ public class Scenes {
        	 
             @Override
             public void handle(ActionEvent event) {
-            	setEditorScene(primaryStage);
+            	setEditorScene(Main.stage);
             }
         });
         
@@ -83,7 +74,7 @@ public class Scenes {
         mainMenu.getChildren().addAll(headline,btnPlay,btnSettings,btnClose);
         mainMenu.getChildren().addAll(btnMapEdit);
         
-        return mainMenu;
+        Main.stage.setScene(new Scene(mainMenu, Main.screenWidth, Main.screenHeight));
 	}
 	
 	
@@ -123,6 +114,69 @@ public class Scenes {
 		primaryStage.setScene(new Scene(gameScene, Main.screenWidth, Main.screenHeight));
 		
 	}
+	
+	
+	
+	public static void setGameOverScene(int score, boolean won)
+	{
+		Main.currentGame = null;
+		Button btnNext = new Button();
+        Button btnMainMenu = new Button();
+        Label headline = new Label();
+		if(won == true)
+		{
+			headline.setTextFill(Color.GREEN);
+			Main.stage.setTitle("Pacman - You Won!");
+			btnNext.setText("Next Level");
+			headline.setText("You Won! Score: " + score);
+			btnNext.setOnAction(new EventHandler<ActionEvent>() {
+	        	 
+		            @Override
+		            public void handle(ActionEvent event) {
+		            	Game game = new Game();	//TODO restart game with next level
+	            		Main.currentGame = game;
+		            }
+		        });
+			
+		}else
+		{
+			headline.setTextFill(Color.RED);
+			Main.stage.setTitle("Pacman - Game Over!");
+			btnNext.setText("Try Again");
+			headline.setText("Game Over! Score: " + score);
+			
+			btnNext.setOnAction(new EventHandler<ActionEvent>() {
+	        	 
+	            @Override
+	            public void handle(ActionEvent event) {
+	            	Game game = new Game();	//TODO restart game level 1
+            		Main.currentGame = game;
+	            }
+	        });
+		}
+		btnMainMenu.setText("Main Menu");
+		btnMainMenu.setOnAction(new EventHandler<ActionEvent>() {
+       	 
+            @Override
+            public void handle(ActionEvent event) {
+            	setMainMenuScene();
+            }
+        });
+		btnNext.setFont(buttonFont);
+		btnMainMenu.setFont(buttonFont);
+		headline.setFont(headlineFont);
+		VBox menu = new VBox();
+		menu.setSpacing(20);
+		menu.setAlignment(Pos.CENTER);
+		menu.getChildren().addAll(headline,btnNext,btnMainMenu);
+		
+		Main.stage.setScene(new Scene(menu,Main.screenWidth, Main.screenHeight));
+        
+	}
+	
+	
+	
+	
 	
 	public static void setEditorScene(Stage primaryStage)
 	{

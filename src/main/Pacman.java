@@ -6,6 +6,7 @@ public class Pacman extends MovingEntity {
 
 	public Pacman()
 	{
+		super();
 		setFitHeight(Game.tileSize*sizeFactor);
 		height = getFitHeight();
 		setFitWidth(Game.tileSize*sizeFactor);
@@ -14,8 +15,8 @@ public class Pacman extends MovingEntity {
 		texture = new Image("file:graphics/pacman.gif");
 		setImage(texture);
 		setScaleX(-1);
-		setX(Map.pacmanSpawn.x);
-		setY(Map.pacmanSpawn.y+velocity);//TODO rausfinden wieso +3 nötig
+		setX(Map.pacmanSpawn.x+((Game.tileSize-Game.tileSize*sizeFactor)/2));
+		setY(Map.pacmanSpawn.y+((Game.tileSize-Game.tileSize*sizeFactor)/2));//TODO rausfinden wieso +3(2) nötig. Ist das richtig: (Game.tileSize-Game.tileSize*sizeFactor)/2)??
 		type = 0;
 		enableControl();
 	}
@@ -23,7 +24,7 @@ public class Pacman extends MovingEntity {
 	
 	public void enableControl()
 	{
-		Main.stage.getScene().setOnKeyPressed(e -> {
+		Main.stage.getScene().setOnKeyPressed(e -> {//TODO maybe causes game crash 
 		    if (e.getCode() == KeyCode.DOWN) {
 		    	nextMoveDirection = 0;
 		    } else if(e.getCode() == KeyCode.LEFT)
@@ -38,17 +39,4 @@ public class Pacman extends MovingEntity {
 		    }
 		});	
 	}
-			
-		
-		
-	
-	
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-	
-	
-
 }

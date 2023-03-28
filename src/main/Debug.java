@@ -28,7 +28,10 @@ public class Debug {
 				System.out.println("Tile Row/Col: " + tile.row + " " + tile.col);
 				System.out.println("Tile Coordinates: " + tile.getX() + " " + tile.getY());	
 				System.out.println("Tile Type: " + tile.type);
-				System.out.println("Tile Point: " + tile.getEnt().getX());
+				if(tile.getEnt() != null)
+				{
+					System.out.println("Tile Point: " + tile.getEnt().getX());
+				}
 			}
 		});
 	}	
@@ -51,12 +54,6 @@ public class Debug {
 		        System.out.println("The 'A' key was pressed");
 		    }
 		});
-	}
-	
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

@@ -4,6 +4,7 @@ public class Point extends StaticEntity {
 
 	public Point()
 	{
+		super();
 		type = 3;
 		sizeFactor = .2;
 		setFitHeight(Game.tileSize*sizeFactor);
