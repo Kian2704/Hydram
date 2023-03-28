@@ -13,11 +13,14 @@ public class Map {
 	public static Vec2 pacmanSpawn;
 	public static int numberPathTiles;
 	public static Vec2 ghostSpawn;
-	public static Tile[][] getMap(int cols, int rows)
+	public static Tile[][] getMap(int level,int cols, int rows)
 	{
+		numberPathTiles = 0;
 		try {
-		      File myObj = new File("maps/map.pacmanmap");
-		      Scanner myReader = new Scanner(myObj);
+		      File mapFile = new File("maps/map_" + level + ".pacmanmap");
+		      
+		      
+		      Scanner myReader = new Scanner(mapFile);
 		      if(tiles == null)
 	        	{
 	        		System.out.println("Error Tile Array not initialized!");

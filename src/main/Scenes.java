@@ -78,10 +78,10 @@ public class Scenes {
 	}
 	
 	
-	public static void setGameScene(Stage primaryStage)
+	public static void setGameScene(int level)
 	{
 		
-		primaryStage.setTitle("PacMan - Game");
+		Main.stage.setTitle("PacMan - Game");
 		Pane gameScene = new Pane();
 		Game.gameScene = gameScene;
 		int stageHeight = (int)Main.screenHeight;
@@ -90,10 +90,7 @@ public class Scenes {
 		int numberTileRows = (int)(stageHeight / Game.tileSize);
 		Map.tiles = new Tile[numberTileCols][numberTileRows];
 		Map.tiles1d = new Tile[numberTileCols*numberTileRows];
-		//Game.loadMap(gameScene,numberTileCols,numberTileRows);
-		
-		
-		Map.getMap(numberTileCols, numberTileRows);
+		Map.getMap(level,numberTileCols, numberTileRows);
 		Map.loadMap(gameScene);
 		int index = 0;
 		for(int i = 0; i < numberTileCols;i++)
@@ -111,7 +108,7 @@ public class Scenes {
 					Map.tiles1d[index++] = Map.tiles[i][j];
 			}
 		}
-		primaryStage.setScene(new Scene(gameScene, Main.screenWidth, Main.screenHeight));
+		Main.stage.setScene(new Scene(gameScene, Main.screenWidth, Main.screenHeight));
 		
 	}
 	
@@ -150,6 +147,7 @@ public class Scenes {
 	            @Override
 	            public void handle(ActionEvent event) {
 	            	Game game = new Game();	//TODO restart game level 1
+	            	game.getLevel();
             		Main.currentGame = game;
 	            }
 	        });

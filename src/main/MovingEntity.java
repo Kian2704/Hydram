@@ -6,7 +6,7 @@ public class MovingEntity extends Entity{
 	
 	protected int moveDirection = 1;
 	protected int nextMoveDirection = 1;
-	public static final double velocity = 100;
+	public static final double velocity = 20;
 	//TODO detectCollision y & x in one function (if statement for nextBounds)
 	//true = no collision
 	protected boolean noCollisionY(int collider, double y)//collider : 0 = wall, 1 = entity
@@ -79,11 +79,6 @@ public class MovingEntity extends Entity{
 	
 	public void move()
 	{
-		try {
-			Thread.sleep(10);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		if (moveDirection != nextMoveDirection)
 		{
 			switch(nextMoveDirection) //changes move direction when possible
@@ -95,7 +90,6 @@ public class MovingEntity extends Entity{
 					setRotate(90);
 					setScaleX(1);
 					setScaleY(-1);
-					System.out.println("Hello World");
 									}
 				break;	
 			}

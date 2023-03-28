@@ -9,9 +9,10 @@ public class Game {
 	private int score = 0;
 	public static boolean isGameOver = false;
 	private boolean isPaused = false;
-	private int pointsLeft = 0;
+	private static int level = 1;
+	protected int pointsLeft = 0;
 	public static double tileSize = 40;
-	private int remainingLives = 1;
+	protected int remainingLives = 1;
 	public Ghost[] ghosts;
 	public final int numberGhosts = 5;
 	public static Image pointTexture = new Image("file:graphics/point.png");
@@ -22,6 +23,21 @@ public class Game {
 	public Pacman getPacman()
 	{
 		return pacman;
+	}
+	
+	public int getLevel()
+	{
+		return level;
+	}
+	
+	public static void resetLevel()
+	{
+		level = 1;
+	}
+	
+	public static void levelUp()
+	{
+		level++;
 	}
 	
 	private void checkWin()
@@ -37,6 +53,7 @@ public class Game {
 	
 	private void clearGame()
 	{
+		
 		isGameOver = false;
 	}
 	
@@ -132,7 +149,6 @@ public class Game {
 				{
 				public void run()
 				{
-
 					
 					try {
 						Thread.sleep(1000);
@@ -176,14 +192,19 @@ public class Game {
 		Ghost.numberGhosts = 0;
 		Main.currentGame = null;
 		boolean won = (remainingLives > 0);
+		if(won)
+		{
+			levelUp();
+		}
         Scenes.setGameOverScene(score,won);
 	}
 	public Game()
 	{
-		Scenes.setGameScene(Main.stage);
+		Scenes.setGameScene(getLevel());
 		clearGame();
 		setRemainingPoints();
 		initializeEntities();
 		play();
+		
 	}
 }

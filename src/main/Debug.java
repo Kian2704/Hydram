@@ -5,19 +5,34 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
-public class Debug {
 
-	
+
+public class Debug extends Game {
+
+	public static boolean debugMode = false;
 	public static int getTileRow(Tile tile)
 	{
 		return tile.row;
 	}
+
+	
+	public static void forceWin()
+	{
+		Main.currentGame.gameScene.setOnKeyPressed(e ->
+		{
+			if(e.getCode() == KeyCode.NUMPAD5)
+			{
+				Main.currentGame.pointsLeft = 1;
+			}
+		});
+	}
+	
+	
 	
 	public static int getTileCol(Tile tile)
 	{
 		return tile.col;
 	}
-	
 	
 	public static void tileDebugEventHandler(Tile tile)
 	{
