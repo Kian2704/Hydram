@@ -9,6 +9,7 @@ public class Ghost extends MovingEntity {
 	private static int randomMoveTimer = 0;
 	private static int randomMoveCounter = 0;
 	private boolean axisSwitch;
+	private boolean isEatable = false;
 	public Ghost()
 	{
 		type = 1;
@@ -20,21 +21,57 @@ public class Ghost extends MovingEntity {
 		height = getFitHeight();
 		setFitWidth(Game.tileSize*sizeFactor);
 		width = getFitWidth();
+		changeSkin();
+		
+		
+	}
+	
+	public void reset()
+	{
+		setEatable(false);
+		setLayoutX(Map.ghostSpawn.x+((Game.tileSize-Game.tileSize*sizeFactor)/2));
+		setLayoutY(Map.ghostSpawn.y+((Game.tileSize-Game.tileSize*sizeFactor)/2));
+		nextMoveDirection = 2;
+	}
+	
+	public boolean isEatable()
+	{
+		return isEatable;
+	}
+	
+	public void setEatable(boolean bool)
+	{
+		isEatable = bool;
+		changeSkin();
+	}
+	
+	
+	public void changeSkin()
+	{
 		Image img = null;
-		switch(id)
+		if(isEatable == false)
 		{
-		case 0: img = new Image("file:graphics/blue.gif");break;
-		case 1:	img = new Image("file:graphics/green.gif");break;
-		case 2:	img = new Image("file:graphics/red.gif");break;
-		case 3:	img = new Image("file:graphics/purple.gif");break;
-		case 4:	img = new Image("file:graphics/orange.gif");break;
+			switch(id)
+			{
+			case 0: img = new Image("file:graphics/blue.gif");break;
+			case 1:	img = new Image("file:graphics/green.gif");break;
+			case 2:	img = new Image("file:graphics/red.gif");break;
+			case 3:	img = new Image("file:graphics/purple.gif");break;
+			case 4:	img = new Image("file:graphics/orange.gif");break;
+			}
+		}
+		else
+		{
+			img = Game.eatableGhost;
 		}
 		if(img != null)
 		{
 			setImage(img);
 		}
 		
+		
 	}
+	
 	
 	public void setMoves()
 	{

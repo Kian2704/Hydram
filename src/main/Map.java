@@ -70,6 +70,11 @@ public class Map {
 		        		tiles[i][count].setEnt(new SpawnBlocker());
 		        		break;
 		        	}
+		        	case 'U' : {
+		        		tiles[i][count] = new Tile(Game.tileSize*i,Game.tileSize*count,Game.tileSize,Game.tileSize,1);
+		        		tiles[i][count].setEnt(new Powerup());
+		        		break;
+		        	}
 		        	}
 		        }
 		        count++;

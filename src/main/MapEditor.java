@@ -77,12 +77,17 @@ public class MapEditor {
 	        	}
 	        	case 'G' : {
 	        		tile.type=2;
-					tile.setFill(Color.AQUA);
+					tile.setFill(Color.BROWN);
 	        		break;
 	        	}
 	        	case 'B' : {
 	        		tile.type=5;
 					tile.setFill(new ImagePattern(Game.spawnBlockerTexture));
+	        		break;
+	        	}
+	        	case 'U' : {
+	        		tile.type=6;
+					tile.setFill(Color.AQUA);
 	        		break;
 	        	}
 	        	}
@@ -104,7 +109,12 @@ public class MapEditor {
 					{
 						tile.type=3;
 						tile.setFill(Color.YELLOW);
-					}else
+					}else if(event.isShiftDown())
+					{
+						tile.type = 6;
+						tile.setFill(Color.AQUA);
+					}
+					else
 					{
 						tile.type = 0;
 						tile.setFill(Main.wallTilePattern);
@@ -115,7 +125,7 @@ public class MapEditor {
 					if(event.isControlDown())
 					{
 						tile.type=2;
-						tile.setFill(Color.AQUA);
+						tile.setFill(Color.BROWN);
 					}else if(event.isShiftDown())
 					{
 					
@@ -163,6 +173,7 @@ public class MapEditor {
             		case 3: myWriter.write("P");break;
             		case 4: myWriter.write("N");break;
             		case 5: myWriter.write("B");break;
+            		case 6: myWriter.write("U");break;
             		}
             		
             	}

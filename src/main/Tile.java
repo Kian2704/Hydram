@@ -8,9 +8,9 @@ public class Tile extends Rectangle {
 	private Entity ent;
 	public Vec2 coords;
 	
-	public Vec2 getCenter()
+	public Vec2 getCenter(Entity ent)
 	{
-		Vec2 center = new Vec2((coords.x+getWidth()/2),(coords.y+getHeight()/2));
+		Vec2 center = new Vec2(((coords.x+getWidth()/2)-ent.getFitWidth()/2),((coords.y+getHeight()/2)) - ent.getFitWidth()/2);
 		return center;
 	}
 	public boolean setEnt(Entity entity)
@@ -18,10 +18,10 @@ public class Tile extends Rectangle {
 		if(ent == null)
 		{
 			ent = entity;
-			if(ent.type == 3 || ent.type == 4)
+			if(ent.sizeFactor != 1)
 			{
-				ent.setLayoutX(getCenter().x);
-				ent.setLayoutY(getCenter().y);
+				ent.setLayoutX(getCenter(ent).x);
+				ent.setLayoutY(getCenter(ent).y);
 			}else
 			{
 				ent.setLayoutX(coords.x);

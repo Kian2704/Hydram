@@ -35,7 +35,7 @@ public class MovingEntity extends Entity{
 			}
 			
 			//Check collision with Point
-			if((type == 0) && (Map.tiles1d[i].getEnt() != null) && (Map.tiles1d[i].getEnt().type == 3) && (getBoundsInParent().intersects(Map.tiles1d[i].getEnt().getBoundsInParent())))
+			if((type == 0) && (Map.tiles1d[i].getEnt() != null) && (Map.tiles1d[i].getEnt().type == 3 || Map.tiles1d[i].getEnt().type == 4) && (getBoundsInParent().intersects(Map.tiles1d[i].getEnt().getBoundsInParent())))
 			{
 				Main.currentGame.collectPoint(Map.tiles1d[i]);
 			}
@@ -43,7 +43,14 @@ public class MovingEntity extends Entity{
 			//Check Collision with Ghost
 			if( i < Main.currentGame.numberGhosts && type==0 && Main.currentGame.ghosts[i] != null && getBoundsInParent().intersects(Main.currentGame.ghosts[i].getBoundsInParent()))
 			{
-				Main.currentGame.pacmanEaten();
+				if(Main.currentGame.ghosts[i].isEatable())
+				{
+					Main.currentGame.ghostEaten(Main.currentGame.ghosts[i]);
+				}else
+				{
+					Main.currentGame.pacmanEaten();
+				}
+				
 			}
 		}
 	

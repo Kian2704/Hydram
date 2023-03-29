@@ -1,6 +1,7 @@
 package main;
 
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
@@ -15,9 +16,12 @@ public class Game {
 	public static int execution = 0;
 	protected int remainingLives = 3;
 	public Ghost[] ghosts;
+	long startTime;
 	public final int numberGhosts = 1;
 	public static Image pointTexture = new Image("file:graphics/point.png");
+	public static Image powerUpTexture = new Image("file:graphics/powerUp.png");
 	public static Image spawnBlockerTexture = new Image("file:graphics/spawnBlocker.png");
+	public static Image eatableGhost = new Image("file:graphics/eat.gif");
 	
 	public static Pane gameScene;
 	private Pacman pacman;
@@ -79,16 +83,6 @@ public class Game {
 		pointsLeft = Map.numberPathTiles;
 	}
 	
-	private void freezePlayer(int time)
-	{
-		
-	}
-	
-	private void freezeGhosts(int time)
-	{
-		
-	}
-	
 	private void gameOver()
 	{
 		
@@ -112,6 +106,12 @@ public class Game {
 		score -= 200;
 	}
 	
+	public void ghostEaten(Ghost ghost)
+	{
+		ghost.reset();
+		score += 150;
+	}
+	
 	
 	public boolean isGameOver()
 	{
@@ -120,15 +120,55 @@ public class Game {
 		return false;
 	}
 	
+	private void Powerup()
+	{
+		AnimationTimer timer = new AnimationTimer()
+				{
+			boolean start = true;
+					@Override
+					public void handle(long arg0) {
+						long currentTime = System.currentTimeMillis();
+						if(start)
+						{
+							startTime = System.currentTimeMillis();
+							System.out.println("Counter started!");
+							for(int i = 0; i < numberGhosts; i++)
+							{
+								ghosts[i].setEatable(true);
+							}
+							start = false;
+						}
+						
+						if(currentTime - startTime >= 8000)
+						{
+							System.out.println("Counter ended!");
+							for(int i = 0; i < numberGhosts; i++)
+							{
+								ghosts[i].setEatable(false);
+								stop();
+							}
+						}
+					}
+			
+				};
+				timer.start();
+	}
+	
 	public void collectPoint(Tile tile)
 	{
-		if(tile.getEnt() != null && tile.getEnt().type == 3)
+		if((tile.getEnt() != null) && tile.getEnt().type == 4)
+		{
+			Powerup();
+		}
+		if((tile.getEnt() != null) && (tile.getEnt().type == 3 || tile.getEnt().type == 4) )
 		{
 			score += 10;
 			pointsLeft--;
 			tile.removeEnt();
 			checkWin();
+			
 		}
+		
 	}
 	
 	
