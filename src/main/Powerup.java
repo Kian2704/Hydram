@@ -3,7 +3,7 @@ package main;
 public class Powerup extends StaticEntity {
 
 	
-	Powerup()
+	public Powerup()
 	{
 		type = 4;
 		sizeFactor = .4;

@@ -2,18 +2,18 @@ package main;
 import javafx.scene.shape.Rectangle;
 public class Tile extends Rectangle {
 
-	int type;//0 = Wall, 1 = Path,2 = Ghost Spawn, 3 Pacman Spawn, 4 empty tile
-	int row;
-	int col;
+	int type;//0 = Wall, 1 = Path,2 = Ghost Spawn, 3 Pacman Spawn, 4 empty tile, 5 Spawn Blocker
 	private Entity ent;
 	public Vec2 coords;
-	
+	public int col;
+	public int row;
 	public Vec2 getCenter(Entity ent)
 	{
 		Vec2 center = new Vec2(((coords.x+getWidth()/2)-ent.getFitWidth()/2),((coords.y+getHeight()/2)) - ent.getFitWidth()/2);
 		return center;
 	}
-	public boolean setEnt(Entity entity)
+	
+public boolean setEnt(Entity entity)
 	{
 		if(ent == null)
 		{
@@ -31,6 +31,7 @@ public class Tile extends Rectangle {
 		}
 		return false;
 	}
+	
 	
 	public Entity getEnt()
 	{

@@ -10,17 +10,6 @@ import javafx.scene.layout.Pane;
 public class Debug extends Game {
 
 	public static boolean debugMode = false;
-	public static int getTileRow(Tile tile)
-	{
-		return tile.row;
-	}
-
-	
-	
-	public static int getTileCol(Tile tile)
-	{
-		return tile.col;
-	}
 	
 	public static void tileDebugEventHandler(Tile tile)
 	{
@@ -28,9 +17,9 @@ public class Debug extends Game {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				System.out.println("Tile Row/Col: " + tile.row + " " + tile.col);
 				System.out.println("Tile Coordinates: " + tile.getX() + " " + tile.getY());	
 				System.out.println("Tile Type: " + tile.type);
+				System.out.println("Tile Neighbours: " + tile.getNeighbors()[0].type + " " + tile.getNeighbors()[1].type );
 				if(tile.getEnt() != null)
 				{
 					System.out.println("Entity Type: " + tile.getEnt().type);

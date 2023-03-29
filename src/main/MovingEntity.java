@@ -7,7 +7,6 @@ public class MovingEntity extends Entity{
 	protected int moveDirection = 1;
 	protected int nextMoveDirection = 1;
 	//public static final double velocity = 20; TODO non functional. Needs new implementation
-	//TODO detectCollision y & x in one function (if statement for nextBounds)
 	//true = no collision
 	protected boolean noCollision(double coord,int axis)//axis: 0=x 1=y
 	{	
@@ -37,6 +36,7 @@ public class MovingEntity extends Entity{
 			//Check collision with Point
 			if((type == 0) && (Map.tiles1d[i].getEnt() != null) && (Map.tiles1d[i].getEnt().type == 3 || Map.tiles1d[i].getEnt().type == 4) && (getBoundsInParent().intersects(Map.tiles1d[i].getEnt().getBoundsInParent())))
 			{
+				
 				Main.currentGame.collectPoint(Map.tiles1d[i]);
 			}
 			
@@ -69,11 +69,7 @@ public class MovingEntity extends Entity{
 		return -1;
 	}
 	
-	public void checkEntityCollision()
-	{
-		noCollision(getLayoutX(),0);
-		noCollision(getLayoutY(),1);
-	}
+
 	
 	public boolean move()
 	{

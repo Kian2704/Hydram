@@ -83,16 +83,6 @@ public class Scenes {
 		
 		Main.stage.setTitle("PacMan - Game");
 		Pane gameScene = new Pane();
-//		Label score = new Label("Score: ");
-////		score.setLayoutX(20);
-////		score.setLayoutY(20);
-////		score.setFont(scoreFont);
-////		score.setTextFill(Color.DARKRED);
-//		Label lives = new Label("Lives Remaining: 0");
-//		lives.setFont(scoreFont);
-//		lives.setLayoutX(20);
-//		lives.setLayoutY(40);
-//		lives.setTextFill(Color.DARKRED);
 		Game.gameScene = gameScene;
 		int stageHeight = (int)Main.screenHeight;
 		int stageWidth = (int)Main.screenWidth;
@@ -111,14 +101,13 @@ public class Scenes {
 				if(Map.tiles[i][j].type == 1)
 				{
 					Map.numberPathTiles++;
-					
-					
+
 				}
 				Debug.tileDebugEventHandler(Map.tiles[i][j]);
 					Map.tiles1d[index++] = Map.tiles[i][j];
 			}
+			System.out.println("loaded path tiles : " + Map.numberPathTiles);
 		}
-//		gameScene.getChildren().addAll(lives,score);
 		Main.stage.setScene(new Scene(gameScene, Main.screenWidth, Main.screenHeight));
 		
 		
@@ -142,7 +131,7 @@ public class Scenes {
 	        	 
 		            @Override
 		            public void handle(ActionEvent event) {
-		            	Game game = new Game();	//TODO restart game with next level
+		            	Game game = new Game();
 	            		Main.currentGame = game;
 		            }
 		        });
@@ -158,7 +147,7 @@ public class Scenes {
 	        	 
 	            @Override
 	            public void handle(ActionEvent event) {
-	            	Game game = new Game();	//TODO restart game level 1
+	            	Game game = new Game();	
 	            	game.getLevel();
             		Main.currentGame = game;
 	            }
@@ -215,8 +204,6 @@ public class Scenes {
 					tile = new Tile(Game.tileSize*j,Game.tileSize*i,Game.tileSize,Game.tileSize,1);
 				}
 				Map.tiles[j][i] = tile;
-				tile.col = j;
-				tile.row = i;
 				MapEditor.makeEditable(tile);
 				
 				

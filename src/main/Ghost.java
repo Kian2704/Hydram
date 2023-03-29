@@ -83,24 +83,66 @@ public class Ghost extends MovingEntity {
 		boolean moveXAxis = true;
 		double pacmanDistance = Math.sqrt( ((pacmanX-getLayoutX()) * (pacmanX-getLayoutX())) + ((pacmanY-getLayoutY()) * (pacmanY-getLayoutY())) );
 		Vec2 direction = new Vec2(pacmanX-getLayoutX(),pacmanY-getLayoutY());
-		if(randomMoveTimer == 0)
+		Vec2 positionPacman = new Vec2(pacman.getLayoutX(),pacman.getLayoutY());
+		Vec2 positionGhost = new Vec2(getLayoutX(),getLayoutY());
+		if(pacmanDistance >= 150)
 		{
-			randomMoveTimer = Main.random.nextInt(1,51);
-		}
-
-			if(move() == false)
+			if(randomMoveTimer == 0)
 			{
-				nextMoveDirection = Main.random.nextInt(0, 4);
-			}
-			if(randomMoveCounter == randomMoveTimer)
-			{
-				
-				nextMoveDirection = Main.getRandomWithExclusion(Main.random, 0, 4, getOppositeDirection());
-				
 				randomMoveTimer = Main.random.nextInt(1,51);
-				randomMoveCounter = 0;
 			}
-			randomMoveCounter++;
+
+				if(move() == false)
+				{
+					nextMoveDirection = Main.random.nextInt(0, 4);
+				}
+				if(randomMoveCounter == randomMoveTimer)
+				{
+					
+					nextMoveDirection = Main.getRandomWithExclusion(Main.random, 0, 4, getOppositeDirection());
+					
+					randomMoveTimer = Main.random.nextInt(1,51);
+					randomMoveCounter = 0;
+				}
+				randomMoveCounter++;
+		}
+		else
+		{
+				if(axisSwitch)
+				{
+					if(positionPacman.y != positionGhost.y)
+					{
+						if(positionPacman.isAbove(positionGhost))
+						{
+							nextMoveDirection = 2;
+						}
+						if(!positionPacman.isAbove(positionGhost))
+						{
+							nextMoveDirection = 0;
+						}
+					}
+					
+				}else
+				{
+					if(positionPacman.x != positionGhost.x)
+					{
+						if(positionPacman.isLeftTo(positionGhost))
+						{
+							nextMoveDirection = 1;
+						}
+						if(!positionPacman.isLeftTo(positionGhost))
+						{
+							nextMoveDirection = 3;
+						}
+					}
+					
+				}
+				
+				axisSwitch = !axisSwitch;
+			
+				move();
+		}
+		
 		}
 
 	}

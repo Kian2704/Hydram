@@ -17,7 +17,7 @@ public class Game {
 	protected int remainingLives = 3;
 	public Ghost[] ghosts;
 	long startTime;
-	public final int numberGhosts = 1;
+	public final int numberGhosts = 0;
 	public static Image pointTexture = new Image("file:graphics/point.png");
 	public static Image powerUpTexture = new Image("file:graphics/powerUp.png");
 	public static Image spawnBlockerTexture = new Image("file:graphics/spawnBlocker.png");
@@ -102,6 +102,10 @@ public class Game {
 	public void pacmanEaten()
 	{
 		pacman.reset();
+		for(int i = 0; i < numberGhosts;i++)
+		{
+			ghosts[i].reset();
+		}
 		decreaseLives();
 		score -= 200;
 	}
@@ -131,7 +135,6 @@ public class Game {
 						if(start)
 						{
 							startTime = System.currentTimeMillis();
-							System.out.println("Counter started!");
 							for(int i = 0; i < numberGhosts; i++)
 							{
 								ghosts[i].setEatable(true);
@@ -141,7 +144,6 @@ public class Game {
 						
 						if(currentTime - startTime >= 8000)
 						{
-							System.out.println("Counter ended!");
 							for(int i = 0; i < numberGhosts; i++)
 							{
 								ghosts[i].setEatable(false);
@@ -168,7 +170,7 @@ public class Game {
 			checkWin();
 			
 		}
-		
+		System.out.println("Points left:" + pointsLeft);
 	}
 	
 	
@@ -200,7 +202,7 @@ public class Game {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					pacman.enableControl();
+					pacman.enableControl(true);
 			        
 			        AnimationTimer movement = new AnimationTimer() //Runs code in every Frame of the Game ~60fps
 			        		{
@@ -213,42 +215,18 @@ public class Game {
 				        	{
 				        		stopGame();
 				        		stop();
-				        		
 				        	}
 			        		if(!isGameOver)
 			        		{
+			        			pacman.move();
 			        			pacman.move();
 			        			if(Main.random.nextInt(0, 101) < 85)//Ghosts 15% slower than pacman
 			        			{
 			        				for(int i = 0; i < ghosts.length;i++)
 						        	{
 						        		ghosts[i].setMoves();
-						        		
-						 
-						        	}
-			        				
-			        			}
-					        	
-					        	pacman.checkEntityCollision();
-			        		}
-			        		
-				        	
-				        	
-			        		
-			        	}};
-			        		
+						        	}}}}};
 			        	movement.start();
-			        		
-			        
-			        	
-			        
-			        
-			        
-			        
-			        
-			        
-			        
-
 			        		}
 	
 	private void stopGame()

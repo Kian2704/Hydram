@@ -66,7 +66,7 @@ public class Map {
 		        		break;
 		        	}
 		        	case 'B' : {
-		        		tiles[i][count] = new Tile(Game.tileSize*i,Game.tileSize*count,Game.tileSize,Game.tileSize,1);
+		        		tiles[i][count] = new Tile(Game.tileSize*i,Game.tileSize*count,Game.tileSize,Game.tileSize,5);
 		        		tiles[i][count].setEnt(new SpawnBlocker());
 		        		break;
 		        	}
@@ -76,6 +76,8 @@ public class Map {
 		        		break;
 		        	}
 		        	}
+		        	tiles[i][count].col = i;
+		        	tiles[i][count].row = count;
 		        }
 		        count++;
 		        

@@ -27,21 +27,27 @@ public class Pacman extends MovingEntity {
 		nextMoveDirection = 1;
 	}
 	
-	public void enableControl()
+	public void enableControl(boolean bool)
 	{
-		Main.stage.getScene().setOnKeyPressed(e -> {
-		    if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
-		    	nextMoveDirection = 0;
-		    } else if(e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A)
-		    {
-		    	nextMoveDirection = 1;
-		    } else if(e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W)
-		    {
-		    	nextMoveDirection = 2;
-		    }else if(e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D)
-		    {
-		    	nextMoveDirection = 3;
-		    }
-		});	
+		if(bool == true)
+		{
+			Main.stage.getScene().setOnKeyPressed(e -> {
+			    if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
+			    	nextMoveDirection = 0;
+			    } else if(e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A)
+			    {
+			    	nextMoveDirection = 1;
+			    } else if(e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W)
+			    {
+			    	nextMoveDirection = 2;
+			    }else if(e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D)
+			    {
+			    	nextMoveDirection = 3;
+			    }
+			});	
+		}else
+		{
+			Main.stage.getScene().setOnKeyPressed(null);
+		}
 	}
 }
