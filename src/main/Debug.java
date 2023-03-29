@@ -19,7 +19,6 @@ public class Debug extends Game {
 			public void handle(MouseEvent arg0) {
 				System.out.println("Tile Coordinates: " + tile.getX() + " " + tile.getY());	
 				System.out.println("Tile Type: " + tile.type);
-				System.out.println("Tile Neighbours: " + tile.getNeighbors()[0].type + " " + tile.getNeighbors()[1].type );
 				if(tile.getEnt() != null)
 				{
 					System.out.println("Entity Type: " + tile.getEnt().type);
