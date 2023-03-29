@@ -6,9 +6,12 @@ public class Ghost extends MovingEntity {
 	private boolean eatable;
 	public static int numberGhosts;
 	private int id;
-	
+	private static int randomMoveTimer = 0;
+	private static int randomMoveCounter = 0;
+	private boolean axisSwitch;
 	public Ghost()
 	{
+		type = 1;
 		setLayoutX(Map.ghostSpawn.x);
 		setLayoutY(Map.ghostSpawn.y);
 		id = numberGhosts;
@@ -43,53 +46,24 @@ public class Ghost extends MovingEntity {
 		boolean moveXAxis = true;
 		double pacmanDistance = Math.sqrt( ((pacmanX-getLayoutX()) * (pacmanX-getLayoutX())) + ((pacmanY-getLayoutY()) * (pacmanY-getLayoutY())) );
 		Vec2 direction = new Vec2(pacmanX-getLayoutX(),pacmanY-getLayoutY());
-		if(moveDirection != nextMoveDirection)
+		if(randomMoveTimer == 0)
 		{
-			
-			
-			
-			/*
-			 if(moveXAxis)
-			{
-				if()
-				if(pacmanIsRight)
-				{
-					nextMoveDirection = 3;
-				}
-				
-				if(!pacmanIsRight)
-				{
-					nextMoveDirection=1;
-				}
-			}
-			
-			if(!moveXAxis)
-			{
-				if(pacmanIsUnder)
-				{
-					nextMoveDirection = 0;
-				}
-				if(!pacmanIsUnder)
-				{
-					nextMoveDirection = 2;
-				}
-			}
-			
-			
-			moveXAxis = !moveXAxis;*/
+			randomMoveTimer = Main.random.nextInt(1,51);
 		}
-		
-		
-		
-		
-		
-		
-		
-	}
-	
-	
-	
-	
-	
 
-}
+			if(move() == false)
+			{
+				nextMoveDirection = Main.random.nextInt(0, 4);
+			}
+			if(randomMoveCounter == randomMoveTimer)
+			{
+				
+				nextMoveDirection = Main.getRandomWithExclusion(Main.random, 0, 4, getOppositeDirection());
+				
+				randomMoveTimer = Main.random.nextInt(1,51);
+				randomMoveCounter = 0;
+			}
+			randomMoveCounter++;
+		}
+
+	}

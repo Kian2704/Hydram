@@ -15,24 +15,30 @@ public class Pacman extends MovingEntity {
 		texture = new Image("file:graphics/pacman.gif");
 		setImage(texture);
 		setScaleX(-1);
-		setLayoutX(Map.pacmanSpawn.x+((Game.tileSize-Game.tileSize*sizeFactor)/2));
-		setLayoutY(Map.pacmanSpawn.y+((Game.tileSize-Game.tileSize*sizeFactor)/2));//TODO rausfinden wieso +3(2) nötig. Ist das richtig: (Game.tileSize-Game.tileSize*sizeFactor)/2)??
+		reset();
 		type = 0;
 	}
 	
 	
+	public void reset()
+	{
+		setLayoutX(Map.pacmanSpawn.x+((Game.tileSize-Game.tileSize*sizeFactor)/2));
+		setLayoutY(Map.pacmanSpawn.y+((Game.tileSize-Game.tileSize*sizeFactor)/2));
+		nextMoveDirection = 1;
+	}
+	
 	public void enableControl()
 	{
-		Main.stage.getScene().setOnKeyPressed(e -> {//TODO maybe causes game crash 
-		    if (e.getCode() == KeyCode.DOWN) {
+		Main.stage.getScene().setOnKeyPressed(e -> {
+		    if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
 		    	nextMoveDirection = 0;
-		    } else if(e.getCode() == KeyCode.LEFT)
+		    } else if(e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A)
 		    {
 		    	nextMoveDirection = 1;
-		    } else if(e.getCode() == KeyCode.UP)
+		    } else if(e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W)
 		    {
 		    	nextMoveDirection = 2;
-		    }else if(e.getCode() == KeyCode.RIGHT)
+		    }else if(e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D)
 		    {
 		    	nextMoveDirection = 3;
 		    }

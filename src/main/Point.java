@@ -13,10 +13,4 @@ public class Point extends StaticEntity {
 		width = getFitWidth();
 		setImage(Game.pointTexture);
 	}
-	
-	public void collect()
-	{
-		
-	}
-	
 }

@@ -9,4 +9,15 @@ public class Vec2 {
 		x = xcord;
 		y = ycord;
 	}
+	
+	public boolean isAbove(Vec2 compare)
+	{
+		return (y < compare.y);
+	}
+	
+	public boolean isLeftTo(Vec2 compare)
+	{
+		return (x < compare.x);
+	}
+	
 }

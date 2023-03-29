@@ -18,7 +18,7 @@ public class Scenes {
 	
 	final static private Font buttonFont = Font.font("Courier New",FontWeight.BOLD,25);
 	final static private Font headlineFont = Font.font("Courier New",FontWeight.BLACK,30);
-	
+	final static private Font scoreFont = Font.font("Cascadia Code",FontWeight.BLACK,15);
 	
 	
 	public static void setMainMenuScene()
@@ -83,6 +83,16 @@ public class Scenes {
 		
 		Main.stage.setTitle("PacMan - Game");
 		Pane gameScene = new Pane();
+//		Label score = new Label("Score: ");
+////		score.setLayoutX(20);
+////		score.setLayoutY(20);
+////		score.setFont(scoreFont);
+////		score.setTextFill(Color.DARKRED);
+//		Label lives = new Label("Lives Remaining: 0");
+//		lives.setFont(scoreFont);
+//		lives.setLayoutX(20);
+//		lives.setLayoutY(40);
+//		lives.setTextFill(Color.DARKRED);
 		Game.gameScene = gameScene;
 		int stageHeight = (int)Main.screenHeight;
 		int stageWidth = (int)Main.screenWidth;
@@ -108,6 +118,7 @@ public class Scenes {
 					Map.tiles1d[index++] = Map.tiles[i][j];
 			}
 		}
+//		gameScene.getChildren().addAll(lives,score);
 		Main.stage.setScene(new Scene(gameScene, Main.screenWidth, Main.screenHeight));
 		
 		

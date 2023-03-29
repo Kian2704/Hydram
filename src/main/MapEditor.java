@@ -1,7 +1,9 @@
 package main;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;  // Import the IOException class to handle errors
+import java.util.Scanner;
 
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -9,6 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.FileChooser;
 
 public class MapEditor {
@@ -24,9 +27,70 @@ public class MapEditor {
 		    if (e.getCode() == KeyCode.S && e.isControlDown()) {
 		        saveMap(Map.tiles);
 		    }
+		    if (e.getCode() == KeyCode.O && e.isControlDown()) {
+		        loadMap(Map.tiles);
+		    }
 		});
 	}
 	
+	
+	public static void loadMap(Tile[][] tiles)
+	{
+		FileChooser fileChooser = new FileChooser();
+		FileChooser.ExtensionFilter extFilter =  new FileChooser.ExtensionFilter("Map Files (*.pacmanmap)","*.pacmanmap");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showOpenDialog(Main.stage);
+    
+        Scanner reader;
+		try {
+			reader = new Scanner(file);
+		} catch (FileNotFoundException e) {
+			return;
+		}
+        int count = 0;
+        while (reader.hasNextLine()) {//tiles[i][count]
+	        String line = reader.nextLine();
+	        for(int i = 0; i < line.length();i++)
+	        {
+	        	Tile tile = tiles[i][count];
+	        	switch(line.charAt(i))
+	        	{
+	        	case 'X' : {
+	        		tile.type = 1;
+					tile.setFill(Color.BLACK);
+	        		break;
+	        	}
+	        	case 'N' : {
+	        		tile.type=4;
+					tile.setFill(Color.RED);
+	        		break;
+	        	}
+	        	case 'W' : {
+	        		tile.type = 0;
+					tile.setFill(Main.wallTilePattern);
+	        		break;
+	        	}
+	        	case 'P' : {
+	        		tile.type=3;
+					tile.setFill(Color.YELLOW);
+	        		break;
+	        	}
+	        	case 'G' : {
+	        		tile.type=2;
+					tile.setFill(Color.AQUA);
+	        		break;
+	        	}
+	        	case 'B' : {
+	        		tile.type=5;
+					tile.setFill(new ImagePattern(Game.spawnBlockerTexture));
+	        		break;
+	        	}
+	        	}
+	        }
+	        count++;
+	        
+	      }
+	}
 	
 	public static void makeEditable(Tile tile)
 	{
@@ -64,6 +128,10 @@ public class MapEditor {
 						tile.setFill(Color.BLACK);
 					}
 					
+				}else if(event.getButton() == MouseButton.MIDDLE)
+				{
+					tile.type = 5;
+					tile.setFill(new ImagePattern(Game.spawnBlockerTexture));
 				}
 				
 				
@@ -74,8 +142,10 @@ public class MapEditor {
 	{
         try {  
         	FileChooser fileChooser = new FileChooser();
-	        File file = fileChooser.showSaveDialog(Main.stage);
+	        FileChooser.ExtensionFilter extFilter =  new FileChooser.ExtensionFilter("Map Files (*.pacmanmap)","*.pacmanmap");
+	        fileChooser.getExtensionFilters().add(extFilter);
 	        fileChooser.setInitialFileName("map.pacmanmap");
+	        File file = fileChooser.showSaveDialog(Main.stage);
 	        if (file == null)
 	        	return 0;
             FileWriter myWriter = new FileWriter(file);
@@ -92,6 +162,7 @@ public class MapEditor {
             		case 2: myWriter.write("G");break;
             		case 3: myWriter.write("P");break;
             		case 4: myWriter.write("N");break;
+            		case 5: myWriter.write("B");break;
             		}
             		
             	}
@@ -113,9 +184,4 @@ public class MapEditor {
           } 
         return 1;
 	}
-	
-	
-	public static void main(String[] args) {
-	}
-
 }

@@ -16,18 +16,6 @@ public class Debug extends Game {
 	}
 
 	
-	public static void forceWin()
-	{
-		Main.currentGame.gameScene.setOnKeyPressed(e ->
-		{
-			if(e.getCode() == KeyCode.NUMPAD5)
-			{
-				Main.currentGame.pointsLeft = 1;
-			}
-		});
-	}
-	
-	
 	
 	public static int getTileCol(Tile tile)
 	{
@@ -45,7 +33,8 @@ public class Debug extends Game {
 				System.out.println("Tile Type: " + tile.type);
 				if(tile.getEnt() != null)
 				{
-					System.out.println("Tile Point: " + tile.getEnt().getLayoutX());
+					System.out.println("Entity Type: " + tile.getEnt().type);
+					System.out.println("Entity Size: " +tile.getEnt().sizeFactor);
 				}
 			}
 		});

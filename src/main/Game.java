@@ -1,7 +1,6 @@
 package main;
 
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
@@ -14,10 +13,11 @@ public class Game {
 	protected int pointsLeft = 0;
 	public static double tileSize = 40;
 	public static int execution = 0;
-	protected int remainingLives = 1;
+	protected int remainingLives = 3;
 	public Ghost[] ghosts;
-	public final int numberGhosts = 5;
+	public final int numberGhosts = 1;
 	public static Image pointTexture = new Image("file:graphics/point.png");
+	public static Image spawnBlockerTexture = new Image("file:graphics/spawnBlocker.png");
 	
 	public static Pane gameScene;
 	private Pacman pacman;
@@ -25,6 +25,15 @@ public class Game {
 	public Pacman getPacman()
 	{
 		return pacman;
+	}
+	public int getScore()
+	{
+		return score;
+	}
+	
+	public int getRemainingLives()
+	{
+		return remainingLives;
 	}
 	
 	public int getLevel()
@@ -95,17 +104,10 @@ public class Game {
 		}
 	}
 	
-	private void resetPacman()
-	{
-		pacman.setLayoutX(Map.pacmanSpawn.x);
-		pacman.setLayoutY(Map.pacmanSpawn.y);
-		pacman.nextMoveDirection = 1;
-	}
-	
 	
 	public void pacmanEaten()
 	{
-		resetPacman();
+		pacman.reset();
 		decreaseLives();
 		score -= 200;
 	}
@@ -135,12 +137,13 @@ public class Game {
 		pacman = new Pacman();
 		ghosts = new Ghost[numberGhosts];
 		
-		for(int i = 0; i < ghosts.length;i++)
-		{
-			ghosts[i] = new Ghost();
-			gameScene.getChildren().add(ghosts[i]);
-		}
-	
+		
+			for(int i = 0; i < ghosts.length;i++)
+			{
+				ghosts[i] = new Ghost();
+				gameScene.getChildren().add(ghosts[i]);
+			}
+		
 		
 		Debug.entityDebugEventHandler(pacman);
 		gameScene.getChildren().add(pacman);
@@ -161,9 +164,11 @@ public class Game {
 			        
 			        AnimationTimer movement = new AnimationTimer() //Runs code in every Frame of the Game ~60fps
 			        		{
-			        	@Override
+			        	
+			        	
 			        	public void handle(long now)
 			        	{
+			        		
 			        		if(isGameOver)
 				        	{
 				        		stopGame();
@@ -173,11 +178,17 @@ public class Game {
 			        		if(!isGameOver)
 			        		{
 			        			pacman.move();
-					        	for(int i = 0; i < ghosts.length;i++)
-					        	{
-					        		ghosts[i].setMoves();
-					 
-					        	}
+			        			if(Main.random.nextInt(0, 101) < 85)//Ghosts 15% slower than pacman
+			        			{
+			        				for(int i = 0; i < ghosts.length;i++)
+						        	{
+						        		ghosts[i].setMoves();
+						        		
+						 
+						        	}
+			        				
+			        			}
+					        	
 					        	pacman.checkEntityCollision();
 			        		}
 			        		
@@ -208,12 +219,13 @@ public class Game {
 		if(won)
 		{
 			levelUp();
-		}else
-		{
-			resetLevel();
-			resetScore();
 		}
         Scenes.setGameOverScene(score,won);
+        if(!won)
+        {
+    			resetLevel();
+    			resetScore();
+        }
 	}
 	public Game()
 	{

@@ -18,8 +18,15 @@ public class Tile extends Rectangle {
 		if(ent == null)
 		{
 			ent = entity;
-			ent.setLayoutX(getCenter().x);
-			ent.setLayoutY(getCenter().y);
+			if(ent.type == 3 || ent.type == 4)
+			{
+				ent.setLayoutX(getCenter().x);
+				ent.setLayoutY(getCenter().y);
+			}else
+			{
+				ent.setLayoutX(coords.x);
+				ent.setLayoutY(coords.y);
+			}
 			return true;
 		}
 		return false;

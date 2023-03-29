@@ -9,75 +9,66 @@ public class MovingEntity extends Entity{
 	//public static final double velocity = 20; TODO non functional. Needs new implementation
 	//TODO detectCollision y & x in one function (if statement for nextBounds)
 	//true = no collision
-	protected boolean noCollisionY(int collider, double y)//collider : 0 = wall, 1 = entity
-	{
-		
-		
-		
+	protected boolean noCollision(double coord,int axis)//axis: 0=x 1=y
+	{	
 		for(int i = 0; i < Map.tiles1d.length;i++)
 		{
-			BoundingBox nextBounds = new BoundingBox(getLayoutX(),y,width,0.1);
-			
-			if (collider == 0 && (Map.tiles1d[i].type == 0) && nextBounds.intersects(Map.tiles1d[i].getBoundsInParent()))
+			BoundingBox nextBounds;
+			if(axis == 0)
+			{
+				nextBounds = new BoundingBox(coord,getLayoutY(),0.1,height);
+			}else
+			{
+				nextBounds = new BoundingBox(getLayoutX(),coord,width,0.1);
+			}
+			Vec2 posEnt = new Vec2(getLayoutX(),getLayoutY());
+			Vec2 posTile = new Vec2(Map.tiles1d[i].getX(),Map.tiles1d[i].getY());
+			//Check collision with wall
+			if (((Map.tiles1d[i].type == 0) && nextBounds.intersects(Map.tiles1d[i].getBoundsInParent())))
 			{	
 				return false;
 			}
-			if((collider == 1) && (type == 0) && (Map.tiles1d[i].getEnt() != null) && (getBoundsInParent().intersects(Map.tiles1d[i].getEnt().getBoundsInParent())))
-			{
-				Main.currentGame.collectPoint(Map.tiles1d[i]);
-			}
-		}
-		
-		for(int i = 0; i < Main.currentGame.numberGhosts;i++)
-		{
 			
-			if(collider == 1 && type==0 && Main.currentGame.ghosts[i] != null && getBoundsInParent().intersects(Main.currentGame.ghosts[i].getBoundsInParent()))
+			if(((Map.tiles1d[i].getEnt() != null) && (Map.tiles1d[i].getEnt().type == 5) &&nextBounds.intersects(Map.tiles1d[i].getEnt().getBoundsInParent()) && posEnt.isAbove(posTile)))
 			{
-				Main.currentGame.pacmanEaten();
-			}
-			
-		}
-		return true;
-		
-		
-	}
-	//true = no collision
-	protected boolean noCollisionX(int collider,double x)//collider : 0 = wall, 1 = entity
-	{
-		for(int i = 0; i < Map.tiles1d.length;i++)
-		{
-			BoundingBox nextBounds = new BoundingBox(x,getLayoutY(),0.1,height);
-
-			if ((collider == 0) && (Map.tiles1d[i].type == 0) && nextBounds.intersects(Map.tiles1d[i].getBoundsInParent()))
-			{	
 				return false;
 			}
-			if((collider == 1) && (type == 0) && (Map.tiles1d[i].getEnt() != null) && (getBoundsInParent().intersects(Map.tiles1d[i].getEnt().getBoundsInParent())))
+			
+			//Check collision with Point
+			if((type == 0) && (Map.tiles1d[i].getEnt() != null) && (Map.tiles1d[i].getEnt().type == 3) && (getBoundsInParent().intersects(Map.tiles1d[i].getEnt().getBoundsInParent())))
 			{
 				Main.currentGame.collectPoint(Map.tiles1d[i]);
 			}
-		}
-		
-		for(int i = 0; i < Main.currentGame.numberGhosts;i++)
-		{
 			
-			if(collider == 1 && type==0 && Main.currentGame.ghosts[i] != null && getBoundsInParent().intersects(Main.currentGame.ghosts[i].getBoundsInParent()))
+			//Check Collision with Ghost
+			if( i < Main.currentGame.numberGhosts && type==0 && Main.currentGame.ghosts[i] != null && getBoundsInParent().intersects(Main.currentGame.ghosts[i].getBoundsInParent()))
 			{
 				Main.currentGame.pacmanEaten();
 			}
-			
 		}
+	
 		return true;
 	}
 	
+	protected int getOppositeDirection()
+	{
+		switch(moveDirection)
+		{
+		case 0:return 2;
+		case 1:return 3;
+		case 2:return 0;
+		case 3: return 1;
+		}
+		return -1;
+	}
 	
 	public void checkEntityCollision()
 	{
-		noCollisionX(1,getLayoutX());
-		noCollisionY(1,getLayoutY());
+		noCollision(getLayoutX(),0);
+		noCollision(getLayoutY(),1);
 	}
 	
-	public void move()
+	public boolean move()
 	{
 		
 		if (moveDirection != nextMoveDirection)
@@ -85,7 +76,7 @@ public class MovingEntity extends Entity{
 			switch(nextMoveDirection) //changes move direction when possible
 			{
 			case 0: {
-				if(noCollisionY(0,getLayoutY()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight()))
+				if(noCollision(getLayoutY()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight(),1))
 				{
 					moveDirection = nextMoveDirection;
 					setRotate(90);
@@ -97,7 +88,7 @@ public class MovingEntity extends Entity{
 			
 			case 1: 
 			{
-				if(noCollisionX(0,getLayoutX()-((Game.tileSize-Game.tileSize*sizeFactor-1))))
+				if(noCollision(getLayoutX()-((Game.tileSize-Game.tileSize*sizeFactor-1)),0))
 				{
 					moveDirection = nextMoveDirection;
 					setRotate(0);
@@ -108,7 +99,7 @@ public class MovingEntity extends Entity{
 				break;	
 			}
 			case 2:	{
-				if(noCollisionY(0,getLayoutY()-((Game.tileSize-Game.tileSize*sizeFactor-1))))
+				if(noCollision(getLayoutY()-((Game.tileSize-Game.tileSize*sizeFactor-1)),1))
 				{
 					moveDirection = nextMoveDirection;
 					setRotate(270);
@@ -118,7 +109,7 @@ public class MovingEntity extends Entity{
 				break;	
 			}
 			case 3:	{
-				if(noCollisionX(0,getLayoutX()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight()))//No idea why ((Game.tileSize-Game.tileSize*sizeFactor-1))
+				if(noCollision(getLayoutX()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight(),0))//No idea why ((Game.tileSize-Game.tileSize*sizeFactor-1))
 				{
 					moveDirection = nextMoveDirection;
 					setRotate(0);
@@ -130,56 +121,62 @@ public class MovingEntity extends Entity{
 			}
 		}
 		
-		switch(moveDirection) //moves player
+		switch(moveDirection) //moves entity
 		{
 		case 0: {
-			if(noCollisionY(0,getLayoutY()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight()))
-			{setLayoutY(getLayoutY()+1);
+			if(noCollision(getLayoutY()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight(),1))
+			{
 			if(getLayoutY() > Game.gameScene.getHeight())
 			{
 				setLayoutY(0-height);
 				
 				
 			}
-			}break;	
+			setLayoutY(getLayoutY()+1);
+			return true;
+			}break;
 		}
 		case 1: 
 		{
-			if(noCollisionX(0,getLayoutX()-((Game.tileSize-Game.tileSize*sizeFactor-1))))
-			{setLayoutX(getLayoutX()-1);
+			if(noCollision(getLayoutX()-((Game.tileSize-Game.tileSize*sizeFactor-1)),0))
+			{
 			if(getLayoutX() < 0)
 			{
 				setLayoutX(Game.gameScene.getWidth() + width);
 				
 					
 			}
+			setLayoutX(getLayoutX()-1);
+			return true;
 			}break;
 		}
 		case 2:	{
-			if(noCollisionY(0,getLayoutY()-((Game.tileSize-Game.tileSize*sizeFactor-1))))
+			if(noCollision(getLayoutY()-((Game.tileSize-Game.tileSize*sizeFactor-1)),1))
 			{
-				setLayoutY(getLayoutY()-1)
-				;
+				
 			if(getLayoutY() < 0)
 			{
 				setLayoutY(Game.gameScene.getHeight() + height);
 				
 			}
-	
+			setLayoutY(getLayoutY()-1);
+			return true;
 			}break;
 		}
 		case 3:	{
-			if(noCollisionX(0,getLayoutX()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight()))
-			{setLayoutX(getLayoutX()+1);
+			if(noCollision(getLayoutX()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight(),0))
+			{
 			if(getLayoutX() > Game.gameScene.getWidth())
 			{
 				setLayoutX(0 - width);
 				
 			}
-			
+			setLayoutX(getLayoutX()+1);
+			return true;
 }break;
 		}
 		}
+		return false;
 	}
 	
 }

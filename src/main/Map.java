@@ -65,6 +65,11 @@ public class Map {
 		        		ghostSpawn = new Vec2(tiles[i][count].getX(),tiles[i][count].getY());
 		        		break;
 		        	}
+		        	case 'B' : {
+		        		tiles[i][count] = new Tile(Game.tileSize*i,Game.tileSize*count,Game.tileSize,Game.tileSize,1);
+		        		tiles[i][count].setEnt(new SpawnBlocker());
+		        		break;
+		        	}
 		        	}
 		        }
 		        count++;
