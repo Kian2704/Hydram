@@ -1,7 +1,6 @@
 package main;
 
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
@@ -17,7 +16,7 @@ public class Game {
 	protected int remainingLives = 3;
 	public Ghost[] ghosts;
 	long startTime;
-	public final int numberGhosts = 0;
+	public final int numberGhosts = 5;
 	public static Image pointTexture = new Image("file:graphics/point.png");
 	public static Image powerUpTexture = new Image("file:graphics/powerUp.png");
 	public static Image spawnBlockerTexture = new Image("file:graphics/spawnBlocker.png");
@@ -25,6 +24,10 @@ public class Game {
 	
 	public static Pane gameScene;
 	private Pacman pacman;
+	
+	
+	
+	
 	
 	public Pacman getPacman()
 	{
@@ -218,7 +221,6 @@ public class Game {
 				        	}
 			        		if(!isGameOver)
 			        		{
-			        			pacman.move();
 			        			pacman.move();
 			        			if(Main.random.nextInt(0, 101) < 85)//Ghosts 15% slower than pacman
 			        			{

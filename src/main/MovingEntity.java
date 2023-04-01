@@ -6,6 +6,7 @@ public class MovingEntity extends Entity{
 	
 	protected int moveDirection = 1;
 	protected int nextMoveDirection = 1;
+	protected Vec2 currentTile = null;
 	//public static final double velocity = 20; TODO non functional. Needs new implementation
 	//true = no collision
 	protected boolean noCollision(double coord,int axis)//axis: 0=x 1=y
@@ -27,7 +28,11 @@ public class MovingEntity extends Entity{
 			{	
 				return false;
 			}
-			
+			if(Map.tiles1d[i].contains(getLayoutX(),getLayoutY()))
+			{
+				currentTile = new Vec2(Map.tiles1d[i].col,Map.tiles1d[i].row);
+				//System.out.println("Tile: " + currentTile.x +  " " + currentTile.y);
+			}
 			if(((Map.tiles1d[i].getEnt() != null) && (Map.tiles1d[i].getEnt().type == 5) &&nextBounds.intersects(Map.tiles1d[i].getEnt().getBoundsInParent()) && posEnt.isAbove(posTile)))
 			{
 				return false;
