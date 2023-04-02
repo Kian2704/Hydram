@@ -12,7 +12,7 @@ public class Pacman extends MovingEntity {
 		setFitWidth(Game.tileSize*sizeFactor);
 		width = getFitWidth();
 		
-		texture = new Image("file:graphics/pacman.gif");
+		texture = new Image("file:resources/graphics/pacman.gif");
 		setImage(texture);
 		setScaleX(-1);
 		reset();
@@ -25,6 +25,7 @@ public class Pacman extends MovingEntity {
 		setLayoutX(Map.pacmanSpawn.x+((Game.tileSize-Game.tileSize*sizeFactor)/2));
 		setLayoutY(Map.pacmanSpawn.y+((Game.tileSize-Game.tileSize*sizeFactor)/2));
 		nextMoveDirection = 1;
+		freeze(2000);
 	}
 	
 	public void enableControl(boolean bool)

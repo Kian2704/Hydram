@@ -17,7 +17,7 @@ public class Map {
 	{
 		numberPathTiles = 0;
 		try {
-		      File mapFile = new File("maps/map_" + level + ".pacmanmap");
+		      File mapFile = new File("resources/maps/map_" + level + ".pacmanmap");
 		      
 		      
 		      Scanner myReader = new Scanner(mapFile);

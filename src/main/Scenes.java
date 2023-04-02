@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -81,6 +82,7 @@ public class Scenes {
 	public static void setGameScene(int level)
 	{
 		
+		
 		Main.stage.setTitle("PacMan - Game");
 		Pane gameScene = new Pane();
 		Game.gameScene = gameScene;
@@ -88,6 +90,17 @@ public class Scenes {
 		int stageWidth = (int)Main.screenWidth;
 		int numberTileCols = (int)(stageWidth / Game.tileSize);
 		int numberTileRows = (int)(stageHeight / Game.tileSize);
+		VBox statsBox = new VBox();
+		HBox liveBox = new HBox();
+		LiveCounter liveCounter = new LiveCounter();
+		Label scoreBoard = new Label("Score: 0");
+		scoreBoard.setFont(scoreFont);
+		scoreBoard.setTextFill(Color.LIGHTGREY);
+		Game.scoreLabel = scoreBoard;
+		Game.liveCounter =liveCounter;
+		liveBox.getChildren().add(liveCounter);
+		statsBox.getChildren().addAll(scoreBoard,liveBox);
+		
 		Map.tiles = new Tile[numberTileCols][numberTileRows];
 		Map.tiles1d = new Tile[numberTileCols*numberTileRows];
 		Map.getMap(level,numberTileCols, numberTileRows);
@@ -108,6 +121,8 @@ public class Scenes {
 			}
 			System.out.println("loaded path tiles : " + Map.numberPathTiles);
 		}
+		gameScene.getChildren().add(statsBox);
+		
 		Main.stage.setScene(new Scene(gameScene, Main.screenWidth, Main.screenHeight));
 		
 		

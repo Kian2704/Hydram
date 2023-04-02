@@ -1,14 +1,46 @@
 package main;
 
+
+import javafx.animation.AnimationTimer;
 import javafx.geometry.BoundingBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class MovingEntity extends Entity{
 	
 	protected int moveDirection = 1;
 	protected int nextMoveDirection = 1;
 	protected Vec2 currentTile = null;
-	//public static final double velocity = 20; TODO non functional. Needs new implementation
+	public final int velocity = 1;
+	public boolean isFrozen = false;
+	private long frozenTime;
 	//true = no collision
+	public void freeze(int duration)
+	{
+		frozenTime = System.currentTimeMillis();
+		isFrozen = true;
+		AnimationTimer freezeTimer = new AnimationTimer()
+		{
+			
+			@Override
+			public void handle(long arg0) {
+				if(System.currentTimeMillis() >= frozenTime + duration)
+				{
+					isFrozen=false;
+					stop();
+				}
+				
+			}
+	
+		};
+		freezeTimer.start();
+		
+	}
+	
+	public void changeFreezeState()
+	{
+		isFrozen = !isFrozen;
+	}
 	protected boolean noCollision(double coord,int axis)//axis: 0=x 1=y
 	{	
 		for(int i = 0; i < Map.tiles1d.length;i++)
@@ -48,12 +80,23 @@ public class MovingEntity extends Entity{
 			//Check Collision with Ghost
 			if( i < Main.currentGame.numberGhosts && type==0 && Main.currentGame.ghosts[i] != null && getBoundsInParent().intersects(Main.currentGame.ghosts[i].getBoundsInParent()))
 			{
-				if(Main.currentGame.ghosts[i].isEatable())
+				BoundingBox smallerHitbox = new BoundingBox((
+						Main.currentGame.ghosts[i].getBoundsInParent().getMinX()+Main.currentGame.ghosts[i].getBoundsInParent().getWidth()/4),
+						Main.currentGame.ghosts[i].getBoundsInParent().getMinY()+Main.currentGame.ghosts[i].getBoundsInParent().getHeight()/4,
+						Main.currentGame.ghosts[i].getBoundsInParent().getWidth()*0.5,
+						Main.currentGame.ghosts[i].getBoundsInParent().getHeight()*0.5);
+			Rectangle rectangle = new Rectangle(smallerHitbox.getMinX(),smallerHitbox.getMinY(),smallerHitbox.getWidth(),smallerHitbox.getHeight());
+			rectangle.setFill(Color.RED);
+			Game.gameScene.getChildren().add(rectangle);
+				if(getBoundsInParent().intersects(smallerHitbox))
 				{
-					Main.currentGame.ghostEaten(Main.currentGame.ghosts[i]);
-				}else
-				{
-					Main.currentGame.pacmanEaten();
+					if(Main.currentGame.ghosts[i].isEatable())
+					{
+						Main.currentGame.ghostEaten(Main.currentGame.ghosts[i]);
+					}else
+					{
+						Main.currentGame.pacmanEaten();
+					}
 				}
 				
 			}
@@ -78,7 +121,10 @@ public class MovingEntity extends Entity{
 	
 	public boolean move()
 	{
-		
+		if(isFrozen)
+		{
+			return false;
+		}
 		if (moveDirection != nextMoveDirection)
 		{
 			switch(nextMoveDirection) //changes move direction when possible

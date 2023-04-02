@@ -1,8 +1,13 @@
 package main;
 
+import java.io.File;
+
 import javafx.animation.AnimationTimer;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class Game {
 
@@ -14,13 +19,16 @@ public class Game {
 	public static double tileSize = 40;
 	public static int execution = 0;
 	protected int remainingLives = 3;
+	public static Label scoreLabel;
+	public static LiveCounter liveCounter;
 	public Ghost[] ghosts;
+	private MediaPlayer mediaPlayer;
 	long startTime;
 	public final int numberGhosts = 5;
-	public static Image pointTexture = new Image("file:graphics/point.png");
-	public static Image powerUpTexture = new Image("file:graphics/powerUp.png");
-	public static Image spawnBlockerTexture = new Image("file:graphics/spawnBlocker.png");
-	public static Image eatableGhost = new Image("file:graphics/eat.gif");
+	public static Image pointTexture = new Image("file:resources/graphics/point.png");
+	public static Image powerUpTexture = new Image("file:resources/graphics/powerUp.png");
+	public static Image spawnBlockerTexture = new Image("file:resources/graphics/spawnBlocker.png");
+	public static Image eatableGhost = new Image("file:resources/graphics/eat.gif");
 	
 	public static Pane gameScene;
 	private Pacman pacman;
@@ -66,7 +74,10 @@ public class Game {
 		}
 	}
 	
-	
+	private void updateScore()
+	{
+		scoreLabel.setText("Score: " + score);
+	}
 	
 	
 	private void clearGame()
@@ -78,6 +89,7 @@ public class Game {
 	private void resetScore()
 	{
 		score = 0;
+		updateScore();
 	}
 	
 	
@@ -95,6 +107,7 @@ public class Game {
 	private void decreaseLives()
 	{
 		remainingLives--;
+		liveCounter.update(remainingLives);
 		if(remainingLives <= 0)
 		{
 			gameOver();
@@ -104,6 +117,12 @@ public class Game {
 	
 	public void pacmanEaten()
 	{
+		
+		MediaPlayer ughPlayer;
+		String ugh = "resources/sound/dead.mp3";     // For example
+		Media sound = new Media(new File(ugh).toURI().toString());
+		ughPlayer = new MediaPlayer(sound);
+		ughPlayer.play();
 		pacman.reset();
 		for(int i = 0; i < numberGhosts;i++)
 		{
@@ -111,12 +130,19 @@ public class Game {
 		}
 		decreaseLives();
 		score -= 200;
+		updateScore();
 	}
 	
 	public void ghostEaten(Ghost ghost)
 	{
+		MediaPlayer nomPlayer;
+		String nom = "resources/sound/eating.mp3";     // For example
+		Media sound = new Media(new File(nom).toURI().toString());
+		nomPlayer = new MediaPlayer(sound);
+		nomPlayer.play();
 		ghost.reset();
 		score += 150;
+		updateScore();
 	}
 	
 	
@@ -167,7 +193,18 @@ public class Game {
 		}
 		if((tile.getEnt() != null) && (tile.getEnt().type == 3 || tile.getEnt().type == 4) )
 		{
+			MediaPlayer nomPlayer;
+			String nom = "resources/sound/eating.mp3";     // For example
+			Media sound = new Media(new File(nom).toURI().toString());
+			nomPlayer = new MediaPlayer(sound);
+			nomPlayer.play();
+			
 			score += 10;
+			updateScore();
+			for(int i = 0; i < 200; i++)
+			{
+				
+			}
 			pointsLeft--;
 			tile.removeEnt();
 			checkWin();
@@ -199,7 +236,11 @@ public class Game {
 	
 	private void play()
 	{
-					
+		String musicFile = "resources/sound/background.mp3";     // For example
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.setVolume(0.1);
+		mediaPlayer.play();
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
@@ -222,6 +263,10 @@ public class Game {
 			        		if(!isGameOver)
 			        		{
 			        			pacman.move();
+			        			for(int i = 0; i < pacman.velocity-1;i++)
+			        			{
+			        				pacman.move();
+			        			}
 			        			if(Main.random.nextInt(0, 101) < 85)//Ghosts 15% slower than pacman
 			        			{
 			        				for(int i = 0; i < ghosts.length;i++)
@@ -233,6 +278,10 @@ public class Game {
 	
 	private void stopGame()
 	{
+		if(mediaPlayer != null)
+		{
+			mediaPlayer.stop();
+		}
 		Ghost.numberGhosts = 0;
 		Main.currentGame = null;
 		boolean won = (remainingLives > 0);
@@ -249,11 +298,13 @@ public class Game {
 	}
 	public Game()
 	{
+		
 		Scenes.setGameScene(getLevel());
 		clearGame();
 		setRemainingPoints();
 		initializeEntities();
 		play();
+		liveCounter.update(remainingLives);
 		
 	}
 }

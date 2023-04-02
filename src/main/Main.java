@@ -3,16 +3,19 @@ package main;
 import java.util.Random;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 //import javafx.geometry.Insets;
 
 
 public class Main extends Application {
 	
-	final static ImagePattern wallTilePattern = new ImagePattern(new Image("file:graphics/wallTile.png"));
+	final static ImagePattern wallTilePattern = new ImagePattern(new Image("file:resources/graphics/wallTile.png"));
 	static final double screenWidth = 1200;
 	static final double screenHeight = 800;
 	public static Random random = new Random();
@@ -31,6 +34,7 @@ public class Main extends Application {
 	}
 	
 	
+	
     public static void main(String[] args) {
         launch(args);
     }
@@ -39,9 +43,12 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
     	
     	
+    	primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
         primaryStage.setResizable(false);
+        
         stage = primaryStage;
+        
         Scenes.setMainMenuScene();
         
         

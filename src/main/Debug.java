@@ -28,6 +28,9 @@ public class Debug extends Game {
 		});
 	}	
 	
+	
+	
+	
 	public static void entityDebugEventHandler(Entity ent)
 	{
 		ent.setOnMouseClicked(new EventHandler<MouseEvent>(){

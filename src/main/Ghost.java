@@ -31,6 +31,7 @@ public class Ghost extends MovingEntity {
 		setFitWidth(Game.tileSize*sizeFactor);
 		width = getFitWidth();
 		changeSkin();
+		freeze(3000+id*2000);
 		
 		
 		
@@ -61,7 +62,7 @@ public class Ghost extends MovingEntity {
 				while(!path.isEmpty())
 				{
 					Vec2 p = path.get(path.size()-1);
-					Map.tiles[(int) p.x][(int) p.y].setFill(Color.RED);
+					//Map.tiles[(int) p.x][(int) p.y].setFill(Color.RED);
 					returnPath.add(path.get(path.size()-1));
 					path.remove(path.size()-1);
 					
@@ -76,9 +77,9 @@ public class Ghost extends MovingEntity {
 	
 	
 
-	public ArrayList<Vec2> getWayToPacman(Pacman pacman)
+	public ArrayList<Vec2> findWayToVec2(Vec2 tile)
 	{
-		if(currentTile == null || pacman.currentTile == null)
+		if(currentTile == null || tile == null)
 		{
 			return null;
 		}
@@ -113,18 +114,18 @@ public class Ghost extends MovingEntity {
 			double gNew,hNew,fNew;
 			if(Cell.isValid(i-1, j))
 			{
-				if(i-1 == pacman.currentTile.x && j == pacman.currentTile.y)
+				if(i-1 == tile.x && j == tile.y)
 				{
 					cellDetails[i-1][j].parent_i = i;
 					cellDetails[i-1][j].parent_j = j;
-					getPath(cellDetails,pacman.currentTile);
+					getPath(cellDetails,tile);
 					foundDest = true;
-					return getPath(cellDetails,pacman.currentTile);
+					return getPath(cellDetails,tile);
 					
 				}else if(closedList[i-1][j] == false && Map.tiles[i-1][j].type != 0 && Map.tiles[i-1][j].type != 5 )
 				{
 					gNew = cellDetails[i][j].g + 1.0;
-	                hNew = Vec2.getMHDistance(new Vec2(i-1,j),pacman.currentTile);
+	                hNew = Vec2.getMHDistance(new Vec2(i-1,j),tile);
 	                fNew = gNew + hNew;
 	                
 	                if(cellDetails[i-1][j].f == Double.MAX_VALUE || cellDetails[i-1][j].f > fNew)
@@ -146,18 +147,18 @@ public class Ghost extends MovingEntity {
 
 			if(Cell.isValid(i+1, j))
 			{
-				if(i+1 == pacman.currentTile.x && j == pacman.currentTile.y)
+				if(i+1 == tile.x && j == tile.y)
 				{
 					cellDetails[i+1][j].parent_i = i;
 					cellDetails[i+1][j].parent_j = j;
-					getPath(cellDetails,pacman.currentTile);
+					getPath(cellDetails,tile);
 					foundDest = true;
-					return getPath(cellDetails,pacman.currentTile);
+					return getPath(cellDetails,tile);
 					
 				}else if(closedList[i+1][j] == false && Map.tiles[i+1][j].type != 0 && Map.tiles[i+1][j].type != 5 )
 				{
 					gNew = cellDetails[i][j].g + 1.0;
-	                hNew = Vec2.getMHDistance(new Vec2(i+1,j),pacman.currentTile);
+	                hNew = Vec2.getMHDistance(new Vec2(i+1,j),tile);
 	                fNew = gNew + hNew;
 	                
 	                if(cellDetails[i+1][j].f == Double.MAX_VALUE || cellDetails[i+1][j].f > fNew)
@@ -177,18 +178,18 @@ public class Ghost extends MovingEntity {
 			}
 			if(Cell.isValid(i, j+1))
 			{
-				if(i == pacman.currentTile.x && j+1 == pacman.currentTile.y)
+				if(i == tile.x && j+1 == tile.y)
 				{
 					cellDetails[i][j+1].parent_i = i;
 					cellDetails[i][j+1].parent_j = j;
-					getPath(cellDetails,pacman.currentTile);
+					getPath(cellDetails,tile);
 					foundDest = true;
-					return getPath(cellDetails,pacman.currentTile);
+					return getPath(cellDetails,tile);
 					
 				}else if(closedList[i][j+1] == false && Map.tiles[i][j+1].type != 0 && Map.tiles[i][j+1].type != 5 )
 				{
 					gNew = cellDetails[i][j].g + 1.0;
-	                hNew = Vec2.getMHDistance(new Vec2(i,j+1),pacman.currentTile);
+	                hNew = Vec2.getMHDistance(new Vec2(i,j+1),tile);
 	                fNew = gNew + hNew;
 	                
 	                if(cellDetails[i][j+1].f == Double.MAX_VALUE || cellDetails[i][j+1].f > fNew)
@@ -208,17 +209,17 @@ public class Ghost extends MovingEntity {
 			}
 			if(Cell.isValid(i, j-1))
 			{
-				if(i == pacman.currentTile.x && j-1 == pacman.currentTile.y)
+				if(i == tile.x && j-1 == tile.y)
 				{
 					cellDetails[i][j-1].parent_i = i;
 					cellDetails[i][j-1].parent_j = j;
 					foundDest = true;
-					return getPath(cellDetails,pacman.currentTile);
+					return getPath(cellDetails,tile);
 					
 				}else if(closedList[i][j-1] == false && Map.tiles[i][j-1].type != 0 && Map.tiles[i][j-1].type != 5 )
 				{
 					gNew = cellDetails[i][j].g + 1.0;
-	                hNew = Vec2.getMHDistance(new Vec2(i,j-1),pacman.currentTile);
+	                hNew = Vec2.getMHDistance(new Vec2(i,j-1),tile);
 	                fNew = gNew + hNew;
 	                
 	                if(cellDetails[i][j-1].f == Double.MAX_VALUE || cellDetails[i][j-1].f > fNew)
@@ -250,6 +251,7 @@ public class Ghost extends MovingEntity {
 		setLayoutX(Map.ghostSpawn.x+((Game.tileSize-Game.tileSize*sizeFactor)/2));
 		setLayoutY(Map.ghostSpawn.y+((Game.tileSize-Game.tileSize*sizeFactor)/2));
 		nextMoveDirection = 2;
+		freeze(3000+2000*id);
 	}
 	
 	public boolean isEatable()
@@ -271,11 +273,11 @@ public class Ghost extends MovingEntity {
 		{
 			switch(id)
 			{
-			case 0: img = new Image("file:graphics/blue.gif");break;
-			case 1:	img = new Image("file:graphics/green.gif");break;
-			case 2:	img = new Image("file:graphics/red.gif");break;
-			case 3:	img = new Image("file:graphics/purple.gif");break;
-			case 4:	img = new Image("file:graphics/orange.gif");break;
+			case 0: img = new Image("file:resources/graphics/blue.gif");break;
+			case 1:	img = new Image("file:resources/graphics/green.gif");break;
+			case 2:	img = new Image("file:resources/graphics/red.gif");break;
+			case 3:	img = new Image("file:resources/graphics/purple.gif");break;
+			case 4:	img = new Image("file:resources/graphics/orange.gif");break;
 			}
 		}
 		else
@@ -303,6 +305,7 @@ public class Ghost extends MovingEntity {
 		Vec2 direction = new Vec2(pacmanX-getLayoutX(),pacmanY-getLayoutY());
 		Vec2 positionPacman = new Vec2(pacman.getLayoutX(),pacman.getLayoutY());
 		Vec2 positionGhost = new Vec2(getLayoutX(),getLayoutY());
+		
 		if(pacmanDistance >= 200)
 		{
 				
@@ -327,44 +330,28 @@ public class Ghost extends MovingEntity {
 		}
 		else
 		{
-			    	for(int i = 0; i < Map.tiles.length;i++)
-			    	{
-			    		for(int j = 0; j < Map.tiles[0].length;j++)
-			    		{
-			    			if(Map.tiles[i][j].type == 1)
-			    			{
-			    				Map.tiles[i][j].setFill(Color.BLACK);
-			    			}
-			    		}
-			    	}
 			    	
-			    	ArrayList<Vec2> path = getWayToPacman(pacman);
+			    	ArrayList<Vec2> path = findWayToVec2(pacman.currentTile);
 			    	if(path != null)
 			    	{
-			    		System.out.println(path.get(1).x + " " + path.get(1).y);
-			    		System.out.println(currentTile.x + " " + currentTile.y);
-			    		System.out.println(moveDirection);
+
 			    		if(path.get(1) == currentTile)
 			    		{
 			    			path.remove(path.get(1));
 			    		}
 			    		if(path.get(1).isAbove(currentTile))
 			    		{
-			    			System.out.println("daw12");
 			    			nextMoveDirection = 2;
 			    		}else if(path.get(1).isUnder(currentTile))
 			    		{
-			    			System.out.println("daw34");
 			    			nextMoveDirection = 0;
 			    		}
 			    		else if(path.get(1).isLeftTo(currentTile))
 			    		{
-			    			System.out.println("daw45");
 			    			nextMoveDirection = 1;
 			    		}
 			    		else if(path.get(1).isRightTo(currentTile))
 			    		{
-			    			System.out.println("daw56");
 			    			nextMoveDirection = 3;
 			    		}
 			    		if(nextMoveDirection == moveDirection)
