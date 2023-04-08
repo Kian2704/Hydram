@@ -3,8 +3,6 @@ package main;
 import java.util.Random;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
@@ -16,6 +14,7 @@ import javafx.stage.StageStyle;
 public class Main extends Application {
 	
 	final static ImagePattern wallTilePattern = new ImagePattern(new Image("file:resources/graphics/wallTile.png"));
+	final static ImagePattern breakableWallTilePattern = new ImagePattern(new Image("file:resources/graphics/breakableWallTile.png"));
 	static final double screenWidth = 1200;
 	static final double screenHeight = 800;
 	public static Random random = new Random();

@@ -1,16 +1,25 @@
 package main;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -79,6 +88,21 @@ public class Scenes {
 	}
 	
 	
+	public static Node getPauseMenu()
+	{
+		VBox pauseBackground = new VBox();
+		pauseBackground.setAlignment(Pos.CENTER);
+		Rectangle btn = new Rectangle();
+		btn.setWidth(Main.screenWidth);
+		btn.setHeight(Main.screenHeight);
+		btn.opacityProperty().set(0.5);
+		btn.setFill(Color.BLACK);
+		pauseBackground.setBackground(new Background(new BackgroundFill(Color.BLACK,CornerRadii.EMPTY, Insets.EMPTY)));
+		pauseBackground.getChildren().add(btn);
+		return btn;
+	}
+	
+	
 	public static void setGameScene(int level)
 	{
 		
@@ -90,6 +114,41 @@ public class Scenes {
 		int stageWidth = (int)Main.screenWidth;
 		int numberTileCols = (int)(stageWidth / Game.tileSize);
 		int numberTileRows = (int)(stageHeight / Game.tileSize);
+		Pane pauseBackground = new Pane();
+		Rectangle rec = new Rectangle();
+		rec.setFill(Color.BLACK);
+		rec.setWidth(Main.screenWidth);
+		rec.setHeight(Main.screenHeight);
+		rec.setOpacity(0.5);
+		VBox pauseMenu = new VBox();
+		Button pauseResume = new Button("Resume");
+		Button pauseMainMenu = new Button("Back to Main Menu");
+		pauseResume.setFont(buttonFont);
+		pauseResume.setOnAction(new EventHandler<ActionEvent>() {
+       	 
+            @Override
+            public void handle(ActionEvent event) {
+            	pauseBackground.setVisible(false);
+				Main.currentGame.changePause();
+            }
+        });
+		pauseMainMenu.setFont(buttonFont);
+		pauseMainMenu.setOnAction(new EventHandler<ActionEvent>() {
+	       	 
+            @Override
+            public void handle(ActionEvent event) {
+            	Main.currentGame.stopGame();//TODO should save game
+            	setMainMenuScene();
+            	
+            }
+        });
+		pauseMenu.setSpacing(20);
+		pauseMenu.setAlignment(Pos.CENTER);
+		pauseMenu.getChildren().addAll(pauseResume,pauseMainMenu);
+		pauseBackground.getChildren().addAll(rec,pauseMenu);
+		pauseBackground.setVisible(false);
+		pauseMenu.setVisible(true);
+		
 		VBox statsBox = new VBox();
 		HBox liveBox = new HBox();
 		LiveCounter liveCounter = new LiveCounter();
@@ -103,8 +162,10 @@ public class Scenes {
 		
 		Map.tiles = new Tile[numberTileCols][numberTileRows];
 		Map.tiles1d = new Tile[numberTileCols*numberTileRows];
+		
 		Map.getMap(level,numberTileCols, numberTileRows);
 		Map.loadMap(gameScene);
+		gameScene.getChildren().addAll(pauseBackground);
 		int index = 0;
 		for(int i = 0; i < numberTileCols;i++)
 		{
@@ -121,9 +182,22 @@ public class Scenes {
 			}
 			System.out.println("loaded path tiles : " + Map.numberPathTiles);
 		}
-		gameScene.getChildren().add(statsBox);
+		gameScene.getChildren().addAll(statsBox);
 		
 		Main.stage.setScene(new Scene(gameScene, Main.screenWidth, Main.screenHeight));
+		pauseMenu.setLayoutX(Main.screenWidth/2-pauseMenu.getWidth()/2);
+		pauseMenu.setLayoutY(Main.screenHeight/2-pauseMenu.getHeight()/2);
+		Main.stage.getScene().addEventFilter(KeyEvent.KEY_PRESSED,e ->{
+			if(e.getCode() == KeyCode.ESCAPE)
+			{
+				if(Main.currentGame != null)
+				{
+					pauseBackground.setVisible(!pauseBackground.isVisible());
+					Main.currentGame.changePause();
+				}
+			}
+		});
+		
 		
 		
 	}

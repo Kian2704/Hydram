@@ -90,6 +90,11 @@ public class MapEditor {
 					tile.setFill(Color.AQUA);
 	        		break;
 	        	}
+	        	case 'D' : {
+	        		tile.type=7;
+					tile.setFill(Main.breakableWallTilePattern);
+	        		break;
+	        	}
 	        	}
 	        }
 	        count++;
@@ -113,6 +118,10 @@ public class MapEditor {
 					{
 						tile.type = 6;
 						tile.setFill(Color.AQUA);
+					}else if(event.isAltDown())
+					{
+						tile.type = 7;
+						tile.setFill(Main.breakableWallTilePattern);
 					}
 					else
 					{
@@ -174,6 +183,7 @@ public class MapEditor {
             		case 4: myWriter.write("N");break;
             		case 5: myWriter.write("B");break;
             		case 6: myWriter.write("U");break;
+            		case 7: myWriter.write("D");break;
             		}
             		
             	}

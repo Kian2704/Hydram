@@ -9,11 +9,13 @@ import javafx.scene.shape.Rectangle;
 public class MovingEntity extends Entity{
 	
 	protected int moveDirection = 1;
-	protected int nextMoveDirection = 1;
+	protected int nextMveDirection = 1;
 	protected Vec2 currentTile = null;
 	public final int velocity = 1;
 	public boolean isFrozen = false;
 	private long frozenTime;
+	private long blockedTime;
+	private boolean isBlockedDirectionChange;
 	//true = no collision
 	public void freeze(int duration)
 	{
@@ -37,6 +39,7 @@ public class MovingEntity extends Entity{
 		
 	}
 	
+	
 	public void changeFreezeState()
 	{
 		isFrozen = !isFrozen;
@@ -56,14 +59,25 @@ public class MovingEntity extends Entity{
 			Vec2 posEnt = new Vec2(getLayoutX(),getLayoutY());
 			Vec2 posTile = new Vec2(Map.tiles1d[i].getX(),Map.tiles1d[i].getY());
 			//Check collision with wall
-			if (((Map.tiles1d[i].type == 0) && nextBounds.intersects(Map.tiles1d[i].getBoundsInParent())))
+			if (((Map.tiles1d[i].type == 0 || Map.tiles1d[i].type == 7) && nextBounds.intersects(Map.tiles1d[i].getBoundsInParent())))
 			{	
-				return false;
+				if(Map.tiles1d[i].type == 7 && this.type == 0)
+				{
+					if(((Pacman)this).breakWall == true)
+					{
+						Map.tiles1d[i].changeType(1);
+					}else
+					{
+						return false;
+					}
+				}else
+				{
+					return false;
+				}
 			}
 			if(Map.tiles1d[i].contains(getLayoutX(),getLayoutY()))
 			{
 				currentTile = new Vec2(Map.tiles1d[i].col,Map.tiles1d[i].row);
-				//System.out.println("Tile: " + currentTile.x +  " " + currentTile.y);
 			}
 			if(((Map.tiles1d[i].getEnt() != null) && (Map.tiles1d[i].getEnt().type == 5) &&nextBounds.intersects(Map.tiles1d[i].getEnt().getBoundsInParent()) && posEnt.isAbove(posTile)))
 			{
@@ -85,9 +99,6 @@ public class MovingEntity extends Entity{
 						Main.currentGame.ghosts[i].getBoundsInParent().getMinY()+Main.currentGame.ghosts[i].getBoundsInParent().getHeight()/4,
 						Main.currentGame.ghosts[i].getBoundsInParent().getWidth()*0.5,
 						Main.currentGame.ghosts[i].getBoundsInParent().getHeight()*0.5);
-			Rectangle rectangle = new Rectangle(smallerHitbox.getMinX(),smallerHitbox.getMinY(),smallerHitbox.getWidth(),smallerHitbox.getHeight());
-			rectangle.setFill(Color.RED);
-			Game.gameScene.getChildren().add(rectangle);
 				if(getBoundsInParent().intersects(smallerHitbox))
 				{
 					if(Main.currentGame.ghosts[i].isEatable())
@@ -117,6 +128,16 @@ public class MovingEntity extends Entity{
 		return -1;
 	}
 	
+	public void setNextMoveDirection(int next)
+	{
+			this.nextMveDirection = next;
+	}
+	
+	public int getNextMoveDirection()
+	{
+		return nextMveDirection;
+	}
+	
 
 	
 	public boolean move()
@@ -125,14 +146,14 @@ public class MovingEntity extends Entity{
 		{
 			return false;
 		}
-		if (moveDirection != nextMoveDirection)
+		if (moveDirection != getNextMoveDirection())
 		{
-			switch(nextMoveDirection) //changes move direction when possible
+			switch(getNextMoveDirection()) //changes move direction when possible
 			{
 			case 0: {
 				if(noCollision(getLayoutY()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight(),1))
 				{
-					moveDirection = nextMoveDirection;
+					moveDirection = getNextMoveDirection();
 					setRotate(90);
 					setScaleX(1);
 					setScaleY(-1);
@@ -144,7 +165,7 @@ public class MovingEntity extends Entity{
 			{
 				if(noCollision(getLayoutX()-((Game.tileSize-Game.tileSize*sizeFactor-1)),0))
 				{
-					moveDirection = nextMoveDirection;
+					moveDirection = getNextMoveDirection();
 					setRotate(0);
 					setScaleY(1);
 					setScaleX(-1);
@@ -155,7 +176,7 @@ public class MovingEntity extends Entity{
 			case 2:	{
 				if(noCollision(getLayoutY()-((Game.tileSize-Game.tileSize*sizeFactor-1)),1))
 				{
-					moveDirection = nextMoveDirection;
+					moveDirection = getNextMoveDirection();
 					setRotate(270);
 					setScaleY(1);
 					setScaleX(1);
@@ -165,7 +186,7 @@ public class MovingEntity extends Entity{
 			case 3:	{
 				if(noCollision(getLayoutX()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight(),0))//No idea why ((Game.tileSize-Game.tileSize*sizeFactor-1))
 				{
-					moveDirection = nextMoveDirection;
+					moveDirection = getNextMoveDirection();
 					setRotate(0);
 					setScaleY(1);
 					setScaleX(1);
@@ -175,7 +196,7 @@ public class MovingEntity extends Entity{
 			}
 		}
 		
-		switch(moveDirection) //moves entity
+		switch(moveDirection)
 		{
 		case 0: {
 			if(noCollision(getLayoutY()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight(),1))

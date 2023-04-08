@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public class Game {
 
@@ -35,7 +36,10 @@ public class Game {
 	
 	
 	
-	
+	public boolean isPaused()
+	{
+		return isPaused;
+	}
 	
 	public Pacman getPacman()
 	{
@@ -113,6 +117,14 @@ public class Game {
 			gameOver();
 		}
 	}
+	
+	
+	public boolean changePause()
+	{
+		isPaused = !isPaused;
+		return isPaused;
+	}
+	
 	
 	
 	public void pacmanEaten()
@@ -210,7 +222,6 @@ public class Game {
 			checkWin();
 			
 		}
-		System.out.println("Points left:" + pointsLeft);
 	}
 	
 	
@@ -232,8 +243,6 @@ public class Game {
 		
 		
 	}
-	
-	
 	private void play()
 	{
 		String musicFile = "resources/sound/background.mp3";     // For example
@@ -241,6 +250,18 @@ public class Game {
 		mediaPlayer = new MediaPlayer(sound);
 		mediaPlayer.setVolume(0.1);
 		mediaPlayer.play();
+		mediaPlayer.setOnEndOfMedia(new Runnable() {
+
+			@Override
+			public void run() {
+				mediaPlayer.seek(Duration.ZERO);
+				mediaPlayer.play();
+				
+			}
+			
+		});
+		
+		
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
@@ -260,7 +281,7 @@ public class Game {
 				        		stopGame();
 				        		stop();
 				        	}
-			        		if(!isGameOver)
+			        		if(!isGameOver &&  !isPaused)
 			        		{
 			        			pacman.move();
 			        			for(int i = 0; i < pacman.velocity-1;i++)
@@ -272,11 +293,12 @@ public class Game {
 			        				for(int i = 0; i < ghosts.length;i++)
 						        	{
 						        		ghosts[i].setMoves();
-						        	}}}}};
+						        	}}}
+			        	}};
 			        	movement.start();
 			        		}
 	
-	private void stopGame()
+	public void stopGame()
 	{
 		if(mediaPlayer != null)
 		{
@@ -284,7 +306,7 @@ public class Game {
 		}
 		Ghost.numberGhosts = 0;
 		Main.currentGame = null;
-		boolean won = (remainingLives > 0);
+		boolean won = (pointsLeft == 0);
 		if(won)
 		{
 			levelUp();
@@ -299,7 +321,7 @@ public class Game {
 	public Game()
 	{
 		
-		Scenes.setGameScene(getLevel());
+		Scenes.setGameScene(2);
 		clearGame();
 		setRemainingPoints();
 		initializeEntities();

@@ -1,13 +1,8 @@
 package main;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.PriorityQueue;
 
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
 
 public class Ghost extends MovingEntity {
 
@@ -250,7 +245,7 @@ public class Ghost extends MovingEntity {
 		setEatable(false);
 		setLayoutX(Map.ghostSpawn.x+((Game.tileSize-Game.tileSize*sizeFactor)/2));
 		setLayoutY(Map.ghostSpawn.y+((Game.tileSize-Game.tileSize*sizeFactor)/2));
-		nextMoveDirection = 2;
+		setNextMoveDirection(2);
 		freeze(3000+2000*id);
 	}
 	
@@ -295,6 +290,7 @@ public class Ghost extends MovingEntity {
 	
 	public void setMoves()
 	{
+
 		Pacman pacman = Main.currentGame.getPacman();
 		double pacmanX = pacman.getLayoutX();
 		double pacmanY = pacman.getLayoutY();
@@ -316,12 +312,12 @@ public class Ghost extends MovingEntity {
 
 				if(move() == false)
 				{
-					nextMoveDirection = Main.random.nextInt(0, 4);
+					setNextMoveDirection(Main.random.nextInt(0, 4)); 
 				}
 				if(randomMoveCounter == randomMoveTimer)
 				{
 					
-					nextMoveDirection = Main.getRandomWithExclusion(Main.random, 0, 4, getOppositeDirection());
+					setNextMoveDirection(Main.getRandomWithExclusion(Main.random, 0, 4, getOppositeDirection()));
 					
 					randomMoveTimer = Main.random.nextInt(1,51);
 					randomMoveCounter = 0;
@@ -341,20 +337,20 @@ public class Ghost extends MovingEntity {
 			    		}
 			    		if(path.get(1).isAbove(currentTile))
 			    		{
-			    			nextMoveDirection = 2;
+			    			setNextMoveDirection(2);
 			    		}else if(path.get(1).isUnder(currentTile))
 			    		{
-			    			nextMoveDirection = 0;
+			    			setNextMoveDirection(0);
 			    		}
 			    		else if(path.get(1).isLeftTo(currentTile))
 			    		{
-			    			nextMoveDirection = 1;
+			    			setNextMoveDirection(1);
 			    		}
 			    		else if(path.get(1).isRightTo(currentTile))
 			    		{
-			    			nextMoveDirection = 3;
+			    			setNextMoveDirection(3);
 			    		}
-			    		if(nextMoveDirection == moveDirection)
+			    		if(getNextMoveDirection() == moveDirection)
 			    		{
 			    			path.remove(path.get(1));
 			    		}

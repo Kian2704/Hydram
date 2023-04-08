@@ -1,8 +1,9 @@
 package main;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 public class Tile extends Rectangle {
 
-	int type;//0 = Wall, 1 = Path,2 = Ghost Spawn, 3 Pacman Spawn, 4 empty tile, 5 Spawn Blocker
+	int type;//0 = Wall, 1 = Path,2 = Ghost Spawn, 3 Pacman Spawn, 4 empty tile, 5 Spawn Blocker, 6 Powerup, 7 Breakable wall tile
 	private Entity ent;
 	public Vec2 coords;
 	public int col;
@@ -12,6 +13,19 @@ public class Tile extends Rectangle {
 		Vec2 center = new Vec2(((coords.x+getWidth()/2)-ent.getFitWidth()/2),((coords.y+getHeight()/2)) - ent.getFitWidth()/2);
 		return center;
 	}
+	
+	public void changeType(int type)
+	{
+		this.type = type;
+		if(type == 7)
+			this.setFill(Main.breakableWallTilePattern);
+		if(type == 1)
+		{
+			this.setFill(Color.BLACK);
+		}
+		
+	}
+	
 	
 public boolean setEnt(Entity entity)
 	{
@@ -62,6 +76,7 @@ public boolean setEnt(Entity entity)
 		switch(type)
 		{
 		case 0: setFill(Main.wallTilePattern);break; 
+		case 7: setFill(Main.breakableWallTilePattern);break;
 		}
 		
 	}

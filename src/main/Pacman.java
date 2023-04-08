@@ -4,6 +4,8 @@ import javafx.scene.input.KeyCode;
 
 public class Pacman extends MovingEntity {
 
+	
+	boolean breakWall = false;
 	public Pacman()
 	{
 		super();
@@ -24,7 +26,7 @@ public class Pacman extends MovingEntity {
 	{
 		setLayoutX(Map.pacmanSpawn.x+((Game.tileSize-Game.tileSize*sizeFactor)/2));
 		setLayoutY(Map.pacmanSpawn.y+((Game.tileSize-Game.tileSize*sizeFactor)/2));
-		nextMoveDirection = 1;
+		setNextMoveDirection(1);
 		freeze(2000);
 	}
 	
@@ -33,18 +35,39 @@ public class Pacman extends MovingEntity {
 		if(bool == true)
 		{
 			Main.stage.getScene().setOnKeyPressed(e -> {
-			    if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
-			    	nextMoveDirection = 0;
-			    } else if(e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A)
-			    {
-			    	nextMoveDirection = 1;
-			    } else if(e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W)
-			    {
-			    	nextMoveDirection = 2;
-			    }else if(e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D)
-			    {
-			    	nextMoveDirection = 3;
-			    }
+				if(Main.currentGame != null && !Main.currentGame.isPaused())
+				{
+					if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
+				    	setNextMoveDirection(0);
+				    	if(e.isControlDown())
+				    	{
+				    		this.breakWall = true;
+				    	}
+				    		
+				    } else if(e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A)
+				    {
+				    	setNextMoveDirection(1);
+				    	if(e.isControlDown())
+				    	{
+				    		this.breakWall = true;
+				    	}
+				    } else if(e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W)
+				    {
+				    	setNextMoveDirection(2);
+				    	if(e.isControlDown())
+				    	{
+				    		this.breakWall = true;
+				    	}
+				    }else if(e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D)
+				    {
+				    	setNextMoveDirection(3);
+				    	if(e.isControlDown())
+				    	{
+				    		this.breakWall = true;
+				    	}
+				    }
+				}
+			    
 			});	
 		}else
 		{

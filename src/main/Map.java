@@ -75,6 +75,10 @@ public class Map {
 		        		tiles[i][count].setEnt(new Powerup());
 		        		break;
 		        	}
+		        	case 'D' : {
+		        		tiles[i][count] = new Tile(Game.tileSize*i,Game.tileSize*count,Game.tileSize,Game.tileSize,7);
+		        		break;
+		        	}
 		        	}
 		        	tiles[i][count].col = i;
 		        	tiles[i][count].row = count;
