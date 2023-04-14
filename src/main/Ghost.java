@@ -2,6 +2,7 @@ package main;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
+import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 
 public class Ghost extends MovingEntity {
@@ -291,6 +292,12 @@ public class Ghost extends MovingEntity {
 	public void setMoves()
 	{
 
+		Bounds bounds = this.getBoundsInParent();
+//		boolean outOfMap = false;
+//		if(bounds.getMinX() < 0 || bounds.getMaxX() > Main.screenWidth || bounds.getMaxY() > Main.screenHeight || bounds.getMinY() < 0)
+//		{
+//			outOfMap = true;
+//		}
 		Pacman pacman = Main.currentGame.getPacman();
 		double pacmanX = pacman.getLayoutX();
 		double pacmanY = pacman.getLayoutY();
@@ -310,11 +317,11 @@ public class Ghost extends MovingEntity {
 				randomMoveTimer = Main.random.nextInt(1,51);
 			}
 
-				if(move() == false)
+				if(move() == false )
 				{
 					setNextMoveDirection(Main.random.nextInt(0, 4)); 
 				}
-				if(randomMoveCounter == randomMoveTimer)
+				if(randomMoveCounter == randomMoveTimer )
 				{
 					
 					setNextMoveDirection(Main.getRandomWithExclusion(Main.random, 0, 4, getOppositeDirection()));

@@ -1,4 +1,5 @@
 package main;
+import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
@@ -32,6 +33,7 @@ public class Pacman extends MovingEntity {
 	
 	public void enableControl(boolean bool)
 	{
+		
 		if(bool == true)
 		{
 			Main.stage.getScene().setOnKeyPressed(e -> {

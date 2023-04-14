@@ -3,8 +3,7 @@ package main;
 
 import javafx.animation.AnimationTimer;
 import javafx.geometry.BoundingBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.geometry.Bounds;
 
 public class MovingEntity extends Entity{
 	
@@ -37,6 +36,13 @@ public class MovingEntity extends Entity{
 		};
 		freezeTimer.start();
 		
+	}
+	
+	public boolean isOutOfMap()
+	{
+		Bounds bounds = this.getBoundsInParent();
+		return (bounds.getMinX() < 0 || bounds.getMaxX() > Main.screenWidth || bounds.getMaxY() > Main.screenHeight || bounds.getMinY() < 0);
+
 	}
 	
 	
@@ -151,7 +157,7 @@ public class MovingEntity extends Entity{
 			switch(getNextMoveDirection()) //changes move direction when possible
 			{
 			case 0: {
-				if(noCollision(getLayoutY()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight(),1))
+				if(noCollision(getLayoutY()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight(),1) && !isOutOfMap())
 				{
 					moveDirection = getNextMoveDirection();
 					setRotate(90);
@@ -163,7 +169,7 @@ public class MovingEntity extends Entity{
 			
 			case 1: 
 			{
-				if(noCollision(getLayoutX()-((Game.tileSize-Game.tileSize*sizeFactor-1)),0))
+				if(noCollision(getLayoutX()-((Game.tileSize-Game.tileSize*sizeFactor-1)),0) && !isOutOfMap())
 				{
 					moveDirection = getNextMoveDirection();
 					setRotate(0);
@@ -174,7 +180,7 @@ public class MovingEntity extends Entity{
 				break;	
 			}
 			case 2:	{
-				if(noCollision(getLayoutY()-((Game.tileSize-Game.tileSize*sizeFactor-1)),1))
+				if(noCollision(getLayoutY()-((Game.tileSize-Game.tileSize*sizeFactor-1)),1) && !isOutOfMap())
 				{
 					moveDirection = getNextMoveDirection();
 					setRotate(270);
@@ -184,7 +190,7 @@ public class MovingEntity extends Entity{
 				break;	
 			}
 			case 3:	{
-				if(noCollision(getLayoutX()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight(),0))//No idea why ((Game.tileSize-Game.tileSize*sizeFactor-1))
+				if(noCollision(getLayoutX()+((Game.tileSize-Game.tileSize*sizeFactor-1))+getFitHeight(),0) && !isOutOfMap())//No idea why ((Game.tileSize-Game.tileSize*sizeFactor-1))
 				{
 					moveDirection = getNextMoveDirection();
 					setRotate(0);

@@ -321,7 +321,7 @@ public class Game {
 	public Game()
 	{
 		
-		Scenes.setGameScene(2);
+		Scenes.setGameScene(3);
 		clearGame();
 		setRemainingPoints();
 		initializeEntities();
