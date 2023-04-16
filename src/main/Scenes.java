@@ -1,5 +1,6 @@
 package main;
 
+import accounts.User;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -31,15 +34,103 @@ public class Scenes {
 	final static private Font scoreFont = Font.font("Cascadia Code",FontWeight.BLACK,15);
 	
 	
+	
+	public static void setLoginScene()
+	{
+		Main.stage.setTitle("Hydram - Login");
+		TextField username = new TextField();
+		PasswordField password = new PasswordField();
+		Button loginButton = new Button("Login");
+		username.setPromptText("Username");
+		password.setPromptText("Password");
+		username.setMaxWidth(500);
+		password.setMaxWidth(500);
+		loginButton.setFont(buttonFont);
+		username.setFont(buttonFont);
+		password.setFont(buttonFont);
+		Button registerButton = new Button("register");
+		registerButton.maxWidth(300);
+		registerButton.setFont(scoreFont);
+		loginButton.setOnAction(new EventHandler<ActionEvent>() {
+       	 
+            @Override
+            public void handle(ActionEvent event) {
+            	boolean valid = Main.getAccounts().login(username.getText(), password.getText());
+            	if(valid)
+            		setMainMenuScene();
+            	else
+            		setLoginScene();
+            }
+        });
+		
+		registerButton.setOnAction(new EventHandler<ActionEvent>() {
+	       	 
+            @Override
+            public void handle(ActionEvent event) {
+            	setRegisterScene();
+            }
+        });
+		VBox loginMenu = new VBox();
+		loginMenu.getChildren().addAll(username,password,loginButton,registerButton);
+		Main.stage.setScene(new Scene(loginMenu, Main.screenWidth, Main.screenHeight));
+		loginMenu.setSpacing(20);
+		loginMenu.setAlignment(Pos.CENTER);
+		loginMenu.setPadding(new Insets(0,100,0,100));
+		
+	}
+	
+	public static void setRegisterScene()
+	{
+		Main.stage.setTitle("Hydram - Register");
+		TextField username = new TextField();
+		PasswordField password = new PasswordField();
+		PasswordField passwordCheck = new PasswordField();
+		Button registerButton = new Button("Register");
+		username.setPromptText("Username");
+		password.setPromptText("Password");
+		passwordCheck.setPromptText("Password");
+		username.setMaxWidth(500);
+		password.setMaxWidth(500);
+		passwordCheck.setMaxWidth(500);
+		registerButton.setFont(buttonFont);
+		username.setFont(buttonFont);
+		password.setFont(buttonFont);
+		passwordCheck.setFont(buttonFont);
+		registerButton.setOnAction(new EventHandler<ActionEvent>() {
+       	 
+            @Override
+            public void handle(ActionEvent event) {
+            	boolean valid = Main.getAccounts().register(username.getText(), password.getText());
+            	if(valid)
+            		setLoginScene();
+            	else
+            		setRegisterScene();
+            }
+        });
+		VBox loginMenu = new VBox();
+		loginMenu.getChildren().addAll(username,password,passwordCheck,registerButton);
+		Main.stage.setScene(new Scene(loginMenu, Main.screenWidth, Main.screenHeight));
+		loginMenu.setSpacing(20);
+		loginMenu.setAlignment(Pos.CENTER);
+		loginMenu.setPadding(new Insets(0,100,0,100));
+	}
+	
+	
 	public static void setMainMenuScene()
 	{
-		Main.stage.setTitle("PacMan - Main Menu");
+		Main.stage.setTitle("Hydram - Main Menu");
 		
 		Button btnSettings = new Button();
         Button btnPlay = new Button();
         Button btnMapEdit = new Button();
         Button btnClose = new Button();
         Label headline = new Label("Main Menu");
+        Label highscore = new Label("0");
+        headline.setFont(buttonFont);
+        User user = Main.getAccounts().getUser();
+        headline.setText("Highscore: -1");
+        if(user != null)
+        	headline.setText("Highscore: " + user.getHighscore());
         btnPlay.setText("Start Game");
         btnMapEdit.setText("Map Editor(DEV)");
         btnMapEdit.setStyle("-fx-background-color: red; "); 
@@ -82,7 +173,10 @@ public class Scenes {
         mainMenu.setSpacing(20);
         mainMenu.setAlignment(Pos.CENTER);
         mainMenu.getChildren().addAll(headline,btnPlay,btnSettings,btnClose);
-        mainMenu.getChildren().addAll(btnMapEdit);
+        if(Main.getAccounts().getUser().isDeveloper())
+        {
+        	mainMenu.getChildren().addAll(btnMapEdit);
+        }
         
         Main.stage.setScene(new Scene(mainMenu, Main.screenWidth, Main.screenHeight));
 	}

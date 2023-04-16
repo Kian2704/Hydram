@@ -2,6 +2,7 @@ package main;
 
 import java.io.File;
 
+import accounts.User;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,6 +13,7 @@ import javafx.util.Duration;
 
 public class Game {
 
+	private int startScore = 0;
 	private static int score = 0;
 	public static boolean isGameOver = false;
 	private boolean isPaused = false;
@@ -63,11 +65,13 @@ public class Game {
 	public static void resetLevel()
 	{
 		level = 1;
+		Main.getAccounts().getUser().resetLevel();
 	}
 	
 	public static void levelUp()
 	{
 		level++;
+		Main.getAccounts().getUser().increaseLevel();
 	}
 	
 	private void checkWin()
@@ -306,22 +310,32 @@ public class Game {
 		}
 		Ghost.numberGhosts = 0;
 		Main.currentGame = null;
-		boolean won = (pointsLeft == 0);
+		boolean won = (pointsLeft == 0 && remainingLives > 0);
+		boolean gameAborted = (pointsLeft > 0 && remainingLives > 0);
 		if(won)
 		{
 			levelUp();
 		}
+
         Scenes.setGameOverScene(score,won);
-        if(!won)
+        User user = Main.getAccounts().getUser();
+        if(user.getHighscore() < score)
+        	user.setHighscore(score);
+        
+        if(!won && !gameAborted)
         {
     			resetLevel();
     			resetScore();
         }
+		if(gameAborted)
+		{
+			score = startScore;
+		}
 	}
 	public Game()
 	{
-		
-		Scenes.setGameScene(3);
+		this.startScore = score;
+		Scenes.setGameScene(Main.getAccounts().getUser().getCurrentLevel());
 		clearGame();
 		setRemainingPoints();
 		initializeEntities();

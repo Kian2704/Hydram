@@ -37,6 +37,7 @@ public class Pacman extends MovingEntity {
 		if(bool == true)
 		{
 			Main.stage.getScene().setOnKeyPressed(e -> {
+				this.breakWall = false;
 				if(Main.currentGame != null && !Main.currentGame.isPaused())
 				{
 					if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {

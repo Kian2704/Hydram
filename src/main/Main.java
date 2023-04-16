@@ -1,7 +1,10 @@
 package main;
  
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import accounts.Accounts;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
@@ -20,7 +23,8 @@ public class Main extends Application {
 	public static Random random = new Random();
 	static Stage stage;
 	static Game currentGame;
-	
+	private ExecutorService executor = Executors.newSingleThreadExecutor();
+	private static Accounts account;
 	public static int getRandomWithExclusion(Random rnd, int start, int end, int... exclude) {
 	    int random = start + rnd.nextInt(end - start + 1 - exclude.length);
 	    for (int ex : exclude) {
@@ -33,6 +37,11 @@ public class Main extends Application {
 	}
 	
 	
+	public static Accounts getAccounts()
+	{
+		return account;
+	}
+	
 	
     public static void main(String[] args) {
         launch(args);
@@ -41,14 +50,16 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
     	
-    	
-    	primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
         primaryStage.setResizable(false);
-        
+        executor.submit(() -> { 
+        	account = new Accounts();
+        });
         stage = primaryStage;
         
-        Scenes.setMainMenuScene();
+        
+        //Scenes.setMainMenuScene();
+        Scenes.setLoginScene();
         
         
     }
