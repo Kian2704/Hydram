@@ -1,5 +1,8 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import accounts.User;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -32,11 +35,14 @@ public class Scenes {
 	final static private Font buttonFont = Font.font("Courier New",FontWeight.BOLD,25);
 	final static private Font headlineFont = Font.font("Courier New",FontWeight.BLACK,30);
 	final static private Font scoreFont = Font.font("Cascadia Code",FontWeight.BLACK,15);
+	final static private Font errorFont = Font.font("Cascadia Code",FontWeight.BLACK,15);
 	
 	
 	
 	public static void setLoginScene()
 	{
+		List<Label> messages = Main.getAccounts().getErrorLabels();
+			
 		Main.stage.setTitle("Hydram - Login");
 		TextField username = new TextField();
 		PasswordField password = new PasswordField();
@@ -72,6 +78,10 @@ public class Scenes {
         });
 		VBox loginMenu = new VBox();
 		loginMenu.getChildren().addAll(username,password,loginButton,registerButton);
+		for(Label message : messages)
+		{
+			loginMenu.getChildren().addAll(message);
+		}
 		Main.stage.setScene(new Scene(loginMenu, Main.screenWidth, Main.screenHeight));
 		loginMenu.setSpacing(20);
 		loginMenu.setAlignment(Pos.CENTER);
@@ -81,6 +91,7 @@ public class Scenes {
 	
 	public static void setRegisterScene()
 	{
+		List<Label> messages = Main.getAccounts().getErrorLabels();
 		Main.stage.setTitle("Hydram - Register");
 		TextField username = new TextField();
 		PasswordField password = new PasswordField();
@@ -100,7 +111,7 @@ public class Scenes {
        	 
             @Override
             public void handle(ActionEvent event) {
-            	boolean valid = Main.getAccounts().register(username.getText(), password.getText());
+            	boolean valid = Main.getAccounts().register(username.getText(), password.getText(),passwordCheck.getText());
             	if(valid)
             		setLoginScene();
             	else
@@ -109,6 +120,10 @@ public class Scenes {
         });
 		VBox loginMenu = new VBox();
 		loginMenu.getChildren().addAll(username,password,passwordCheck,registerButton);
+		for(Label message : messages)
+		{
+			loginMenu.getChildren().addAll(message);
+		}
 		Main.stage.setScene(new Scene(loginMenu, Main.screenWidth, Main.screenHeight));
 		loginMenu.setSpacing(20);
 		loginMenu.setAlignment(Pos.CENTER);

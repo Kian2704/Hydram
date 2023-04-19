@@ -6,10 +6,12 @@ import java.util.concurrent.Executors;
 
 import accounts.Accounts;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 //import javafx.geometry.Insets;
 
@@ -22,9 +24,11 @@ public class Main extends Application {
 	static final double screenHeight = 800;
 	public static Random random = new Random();
 	static Stage stage;
+	boolean stopped = false;
 	static Game currentGame;
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private static Accounts account;
+	
 	public static int getRandomWithExclusion(Random rnd, int start, int end, int... exclude) {
 	    int random = start + rnd.nextInt(end - start + 1 - exclude.length);
 	    for (int ex : exclude) {
@@ -35,6 +39,9 @@ public class Main extends Application {
 	    }
 	    return random;
 	}
+	
+	
+	
 	
 	
 	public static Accounts getAccounts()
@@ -52,9 +59,37 @@ public class Main extends Application {
     	
         primaryStage.show();
         primaryStage.setResizable(false);
-        executor.submit(() -> { 
         	account = new Accounts();
-        });
+        	
+        	executor.submit(() -> {
+        		while(!stopped)
+        		{
+        			try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+        			if(account.isTimedOut()) {
+        				
+        				Platform.runLater(() -> {
+        					
+        					Alert alert = new Alert(AlertType.ERROR);
+            				alert.setTitle("Timeout!");
+            				alert.setHeaderText("Timeout");
+            				alert.setContentText("Connection to the database has timed out!");
+            				alert.showAndWait();
+            				Platform.exit();
+            				
+        				});
+        				stopped = true;
+        			}
+        			executor.shutdown();
+        			        		}
+        	});
+
+        
+
         stage = primaryStage;
         
         

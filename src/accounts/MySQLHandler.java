@@ -1,6 +1,5 @@
 package accounts;
 
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,10 +11,12 @@ import java.util.concurrent.Executors;
 public class MySQLHandler {
 	
 	Connection connection;
+	Accounts account;
 	ExecutorService executor = Executors.newSingleThreadExecutor();
 	MySQLHandler(Accounts accounts)
 	{
 		this.connection = accounts.connection;
+		account = accounts;
 	}
 	
 	protected User login(String username,String password)
@@ -28,6 +29,7 @@ public class MySQLHandler {
 			ResultSet results = stmt.executeQuery();
 			if(!results.next())
 			{
+				account.addErrorMessage("Invalid Username or Password!");
 				return null;
 			}
 			String uuid = results.getString("uuid");
@@ -45,11 +47,36 @@ public class MySQLHandler {
 		}
 	}
 	
+	protected boolean usernameAvailable(String username)
+	{
+		String sql = "SELECT * FROM accounts WHERE username = ?";
+		try
+		{
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setString(1, username);
+			ResultSet results = stmt.executeQuery();
+			if (!results.next())
+			{
+				return true;
+			}
+			return false;
+		}catch(Exception e)
+		{
+			return false;
+		}
+	}
+	
+	
 	protected boolean register(String username,String password)
 	{
 		String uuid = UUID.randomUUID().toString();
 		if(password == null)
 			return false;
+		if(!usernameAvailable(username))
+		{
+			account.addErrorMessage("Username already taken!");
+			return false;
+		}
 		String sql = "INSERT INTO accounts (uuid,username,password) VALUES (?,?,?)";
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);

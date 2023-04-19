@@ -329,7 +329,7 @@ public class Game {
         }
 		if(gameAborted)
 		{
-			score = startScore;
+			score = startScore;//TODO in reset score mit rein
 		}
 	}
 	public Game()

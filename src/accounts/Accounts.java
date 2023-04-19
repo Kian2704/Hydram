@@ -6,27 +6,75 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import main.Main;
+
 public class Accounts {
 	
-	String hostname = "db4free.net:3306";
+	String hostname = "hostname";
 	String database = "hydram";
 	String username = "hydramadmin";
-	String password = "!K14n12tC007!";
+	String password = "password";
 	Connection connection;
 	private MySQLHandler handler;
+	private  List<String> errorMessages = new ArrayList<String>();
 	
 	private User user = null;
+	
+	
+	public void addErrorMessage(String message)
+	{
+		errorMessages.add(message);
+	}
+	public List<String> getErrorMessages()
+	{
+		List<String> temp = errorMessages;
+		return temp;
+		
+	}
+	public List<Label> getErrorLabels()
+	{
+		List<Label> labels = new ArrayList<Label>();
+		for(String error : getErrorMessages())
+		{
+			Label label = new Label(error);
+			label.setTextFill(Color.DARKRED);
+			labels.add(label);
+		}
+		errorMessages.clear();
+		return labels;
+		
+		
+	}
+	
+	public boolean isTimedOut()
+	{
+		try {
+			if(!connection.isValid(1))
+			{
+				return true;
+			}
+		} catch (SQLException e) {
+			return true;
+		}
+		return false;
+	}
+	
 	
 	public Accounts()
 	{
 		
 		String url = String.format("jdbc:mysql://%s/%s", hostname,database);
-		
 			try {
 				connection = DriverManager.getConnection(url, username, password);
 			} catch (Exception e) {
@@ -75,8 +123,13 @@ public class Accounts {
 			
 	}
 	
-	public boolean register(String username,String password)
+	public boolean register(String username,String password,String passwordCheck)
 	{
+		if(!password.equals(passwordCheck))
+		{
+			this.addErrorMessage("Passwords not matching!");
+			return false;
+		}
 		boolean valid = handler.register(username, hashPassword(username,password));
 		return valid;
 		
