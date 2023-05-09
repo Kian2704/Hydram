@@ -18,10 +18,10 @@ import javafx.scene.paint.Color;
 
 public class Accounts {
 	
-	String hostname = "localhost";
-	String database = "root";
-	String username = "root";
-	String password = "password";
+	String hostname = "db4free.net:3306";
+	String database = "hydram";
+	String username = "hydramadmin";
+	String password = "!K14n12tC007!";
 	Connection connection;
 	private MySQLHandler handler;
 	private  List<String> errorMessages = new ArrayList<String>();

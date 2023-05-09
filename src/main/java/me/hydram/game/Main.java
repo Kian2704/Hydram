@@ -26,6 +26,7 @@ public class Main extends Application {
 	static Stage stage;
 	boolean stopped = false;
 	static Game currentGame;
+	static boolean enableMultiplayer = true;
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private static Accounts account;
 	

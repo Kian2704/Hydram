@@ -35,7 +35,8 @@ public class Game {
 	public static Image eatableGhost ;
 	
 	public static Pane gameScene;
-	private Pacman pacman;
+	private Pacman pacman = null;
+	private Pacman pacman2 = null;
 	
 	
 	
@@ -165,7 +166,6 @@ public class Game {
 			nomPlayer = new MediaPlayer(sound);
 			nomPlayer.play();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -181,37 +181,45 @@ public class Game {
 			return true;
 		return false;
 	}
-	
 	private void Powerup()
 	{
+		int random = Main.random.nextInt(2);
 		AnimationTimer timer = new AnimationTimer()
+		{
+	boolean start = true;
+			@Override
+			public void handle(long arg0) {
+				long currentTime = System.currentTimeMillis();
+				if(start)
 				{
-			boolean start = true;
-					@Override
-					public void handle(long arg0) {
-						long currentTime = System.currentTimeMillis();
-						if(start)
-						{
-							startTime = System.currentTimeMillis();
-							for(int i = 0; i < numberGhosts; i++)
-							{
-								ghosts[i].setEatable(true);
-							}
-							start = false;
-						}
+					startTime = System.currentTimeMillis();
+					for(int i = 0; i < numberGhosts; i++)
+					{
 						
-						if(currentTime - startTime >= 8000)
-						{
-							for(int i = 0; i < numberGhosts; i++)
-							{
-								ghosts[i].setEatable(false);
-								stop();
-							}
-						}
+						
+						if(random == 0)
+							ghosts[i].setEatable(true);
+						else if(random == 1)
+							pacman.setDoubleSpeed(true);
 					}
-			
-				};
-				timer.start();
+					start = false;
+				}
+				
+				if(currentTime - startTime >= 8000)
+				{
+					for(int i = 0; i < numberGhosts; i++)
+					{
+						if(random == 0)
+							ghosts[i].setEatable(false);
+						else if(random == 1)
+							pacman.setDoubleSpeed(false);
+						stop();
+					}
+				}
+			}
+	
+		};
+		timer.start();
 	}
 	
 	public void collectPoint(Tile tile)
@@ -252,6 +260,8 @@ public class Game {
 	private void initializeEntities()
 	{
 		pacman = new Pacman();
+		if(Main.enableMultiplayer == true)
+			this.pacman2 = new Pacman();
 		ghosts = new Ghost[numberGhosts];
 		
 		
@@ -315,6 +325,14 @@ public class Game {
 			        		if(!isGameOver &&  !isPaused)
 			        		{
 			        			pacman.move();
+			        			pacman.move();//Only 3 times if Pc bad
+			        			pacman.move();
+			        			if(pacman.getDoubleSpeed())
+			        			{
+			        				pacman.move();
+				        			pacman.move();//Only 3 times if Pc bad
+				        			pacman.move();
+			        			}
 			        			for(int i = 0; i < pacman.velocity-1;i++)
 			        			{
 			        				pacman.move();
@@ -323,6 +341,8 @@ public class Game {
 			        			{
 			        				for(int i = 0; i < ghosts.length;i++)
 						        	{
+						        		ghosts[i].setMoves();
+						        		ghosts[i].setMoves();
 						        		ghosts[i].setMoves();
 						        	}}}
 			        	}};

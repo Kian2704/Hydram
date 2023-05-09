@@ -6,14 +6,19 @@ public class Pacman extends MovingEntity {
 
 	
 	boolean breakWall = false;
+	boolean doubleSpeed = false;
+	static int numberPlayers;
+	private int playerNumber = 0;
 	public Pacman()
 	{
 		super();
+		System.out.println("Pacman created");
+		playerNumber = numberPlayers;
+		numberPlayers++;
 		setFitHeight(Game.tileSize*sizeFactor);
 		height = getFitHeight();
 		setFitWidth(Game.tileSize*sizeFactor);
 		width = getFitWidth();
-		
 		texture = new Image(this.getClass().getResourceAsStream("graphics/pacman.gif"));
 		setImage(texture);
 		setScaleX(-1);
@@ -22,8 +27,25 @@ public class Pacman extends MovingEntity {
 	}
 	
 	
+	public void setDoubleSpeed(boolean set)
+	{
+		this.doubleSpeed = set;
+	}
+	
+	public boolean getDoubleSpeed()
+	{
+		return doubleSpeed;
+	}
+	
+	
+	
 	public void reset()
 	{
+		Vec2 spawn = null;
+		if(this.playerNumber == 0)
+			spawn = Map.pacmanSpawn;
+		else if(this.playerNumber == 1)
+			spawn = Map.pacmanSpawn2;
 		setLayoutX(Map.pacmanSpawn.x+((Game.tileSize-Game.tileSize*sizeFactor)/2));
 		setLayoutY(Map.pacmanSpawn.y+((Game.tileSize-Game.tileSize*sizeFactor)/2));
 		setNextMoveDirection(1);
