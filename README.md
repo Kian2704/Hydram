@@ -8,7 +8,7 @@ Programm Importieren und Starten:
     - Entpackten Ordner Auswählen(Nicht die .zip Datei) (Der richtige Ordner enthält die datei "pom.xml")
     - Finish
     - Importiertes Projekt im Projektexplorer rechtsklicken->Run As->"Maven Build..."(Wichtig: nicht "Maven Build" sondern "Maven Build...")
-    - In das Feld "Goals" folgenden Befehl schreiben: "mvn javafx:run"
+    - In das Feld "Goals" folgenden Befehl schreiben: "javafx:run"
     - Auf "run" drücken
     - Fertig: Das Programm startet :)
 
