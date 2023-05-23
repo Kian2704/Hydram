@@ -3,6 +3,7 @@ package me.hydram.game;
 import javafx.scene.image.Image;
 
 public class Graphics {
+	//Initialisiert Variablen von Typ Image für die verschiedenen Texturen
 	private static Image pointTexture;
 	private static Image powerUpTexture;
 	private static Image spawnBlockerTexture;
@@ -15,8 +16,8 @@ public class Graphics {
 	
 	
 	
-	public Graphics()
-	{
+	public Graphics(){
+		//Setzt die zuvor initialisierten Variablen auf die jeweils korrekte Datei
 		pointTexture = new Image(this.getClass().getResourceAsStream("graphics/point.png"));
 		powerUpTexture = new Image(this.getClass().getResourceAsStream("graphics/powerup.png"));
 		spawnBlockerTexture = new Image(this.getClass().getResourceAsStream("graphics/spawnBlocker.png"));
@@ -26,10 +27,9 @@ public class Graphics {
 		ghost3 = new Image(this.getClass().getResourceAsStream("graphics/blue.gif"));
 		ghost4 = new Image(this.getClass().getResourceAsStream("graphics/orange.gif"));
 		ghost5 = new Image(this.getClass().getResourceAsStream("graphics/purple.gif"));
-		
 	}
-	
-	
+
+	//gibt auf Anfrage die Texturvariablen aus
 	public static Image getPointTexture()
 	{
 		return pointTexture;
@@ -46,23 +46,18 @@ public class Graphics {
 	{
 		return eatableGhost;
 	}
-	
-	public static Image getGhostTexture(Ghost ghost)
-	{
-		if(ghost.isEatable() == false)
-		{
-			switch(ghost.getGhostId())
-			{
-			case 0: return ghost1;
-			case 1:	return ghost2;
-			case 2:	return ghost3;
-			case 3:	return ghost4;
-			case 4:	return ghost5;
+
+	//gibt für den sonderfall der Geister die korrekten Texturvariablen aus
+	public static Image getGhostTexture(Ghost ghost){
+		if(ghost.isEatable() == true) {return eatableGhost;
+		} else {
+			switch(ghost.getGhostId()) {
+				case 0: return ghost1;
+				case 1:	return ghost2;
+				case 2:	return ghost3;
+				case 3:	return ghost4;
+				case 4:	return ghost5;
 			}
-		}
-		else
-		{
-			return eatableGhost;
 		}
 		return null;
 	}
