@@ -1,6 +1,7 @@
 package me.hydram.game;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+//Klasse für alle Felder im Spiel
 public class Tile extends Rectangle {
 
 	int type;//0 = Wall, 1 = Path,2 = Ghost Spawn, 3 Pacman Spawn, 4 empty tile, 5 Spawn Blocker, 6 Powerup, 7 Breakable wall tile
@@ -8,12 +9,13 @@ public class Tile extends Rectangle {
 	public Vec2 coords;
 	public int col;
 	public int row;
+	//berechnet den Mittelpunkt des Feldes
 	public Vec2 getCenter(Entity ent)
 	{
 		Vec2 center = new Vec2(((coords.x+getWidth()/2)-ent.getFitWidth()/2),((coords.y+getHeight()/2)) - ent.getFitWidth()/2);
 		return center;
 	}
-	
+	//Wechselt den Typ des Feldes(Für die zerstörbaren Wände)
 	public void changeType(int type)
 	{
 		this.type = type;
@@ -26,7 +28,7 @@ public class Tile extends Rectangle {
 		
 	}
 	
-	
+	//Setzt das Wesen welches sich auf dem Feld befindet
 public boolean setEnt(Entity entity)
 	{
 		if(ent == null)
@@ -46,12 +48,12 @@ public boolean setEnt(Entity entity)
 		return false;
 	}
 	
-	
+	//getter
 	public Entity getEnt()
 	{
 			return ent;
 	}
-	
+	//Löscht ein Wesen von einem Feld
 	public boolean removeEnt()
 	{
 			if(ent != null)
@@ -67,7 +69,7 @@ public boolean setEnt(Entity entity)
 				
 				
 	}
-	
+	//Erstellt ein Objekt vom Typ Tile
 	public Tile(double x, double y, double width, double height,int vtype) {
 		super(x,y,width,height);
 		type = vtype;

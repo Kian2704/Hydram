@@ -1,7 +1,9 @@
 package me.hydram.game;
 
+//Klasse der Goldenen Punkte welche Pacman aufsammeln muss
 public class Point extends StaticEntity {
-
+	
+	//Erstellt den Punkt
 	public Point()
 	{
 		super();

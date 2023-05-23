@@ -20,7 +20,7 @@ public class MapEditor {
 	
 	private static int tool;
 	private static int menuOpen;
-
+//Erstellt Tastenkombinationen zum speichern und laden der Karte(Level)
 	public static void start(Scene scene)
 	{
 		scene.setOnKeyPressed(e -> {
@@ -33,7 +33,7 @@ public class MapEditor {
 		});
 	}
 	
-	
+	//Läd eine Spielkarte(Level) aus einer Datei
 	public static void loadMap(Tile[][] tiles)
 	{
 		FileChooser fileChooser = new FileChooser();
@@ -103,6 +103,8 @@ public class MapEditor {
         reader.close();
 	}
 	
+	
+	//Aktiviert die Funktion, die angeklickten Felder zu verändern.
 	public static void makeEditable(Tile tile)
 	{
 		tile.setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -158,6 +160,7 @@ public class MapEditor {
 			}
 		});
 	}
+	//Speichert die erstellte Map in einer Datei mit der Dateiendung .pacmanmap
 	public static int saveMap(Tile[][] tiles)
 	{
         try {  

@@ -28,17 +28,25 @@ public class Accounts {
 	
 	private User user = null;
 	
-	
+	/*
+	 Fügt eine Fehlermeldung hinzu welche später im Login Bildschirm angezeigt wird.
+	 */
 	public void addErrorMessage(String message)
 	{
 		errorMessages.add(message);
 	}
+	/*
+	 Ruft vorhandene Fehlermeldungen ab und gibt diese als String Liste zurück.
+	 */
 	public List<String> getErrorMessages()
 	{
 		List<String> temp = errorMessages;
 		return temp;
 		
 	}
+	/*
+	 Ruft vorhandene Fehlermeldungen ab und gibt diese als Label Liste zurück.Löscht danach alle vorhandenen Fehlermeldungen.
+	 */
 	public List<Label> getErrorLabels()
 	{
 		List<Label> labels = new ArrayList<Label>();
@@ -53,7 +61,9 @@ public class Accounts {
 		
 		
 	}
-	
+	/*
+	 Überprüft ob der Nutzer eine Verbindung zu der Datenbank herstellen kann
+	 */
 	public boolean isTimedOut()
 	{
 		try {
@@ -67,7 +77,9 @@ public class Accounts {
 		return false;
 	}
 	
-	
+	/*
+	 Konstruktor der Klasse. Baut die Verbindung zur Datenbank auf
+	 */
 	public Accounts()
 	{
 		
@@ -79,17 +91,19 @@ public class Accounts {
 				e.printStackTrace();
 			}
 			handler = new MySQLHandler(this);
-			//sampleAccount();
 	}
-	
+	/*
+	 Gibt ein Objekt vom Typ User zurück
+	 */
 	public User getUser()
 	{
 		return user;
 	}
-	
+	/*
+	 Verschlüsselt das Passwort
+	 */
 	public static String hashPassword(String username,String password)
 	{
-		//peter;1  	[B@169f7064
 		byte[] salt = username.getBytes();
 		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 512);
 		try {
@@ -105,6 +119,10 @@ public class Accounts {
 		
 	}
 	
+	/*
+	 Überprüft die Anmeldedaten des Nutzers und meldet ihn an wenn die Daten mit der Datenbank übereinstimmen. Sonst return false
+	 */
+	
 	public boolean login(String username,String password)
 	{
 		User user = handler.login(username, hashPassword(username,password));
@@ -119,7 +137,9 @@ public class Accounts {
 		}
 			
 	}
-	
+	/*
+	 Registriert einen Nutzer in der Datenbank.
+	 */
 	public boolean register(String username,String password,String passwordCheck)
 	{
 		if(!password.equals(passwordCheck))
@@ -131,28 +151,6 @@ public class Accounts {
 		return valid;
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	public boolean sampleAccount()
-	{
-		String uuid = UUID.randomUUID().toString();
-		String sql = "INSERT INTO accounts(uuid,username,password) VALUES ('" + uuid + "','FettsackLP5','Hallo123')";
-		PreparedStatement stmt;
-		try {
-			stmt = connection.prepareStatement(sql);
-			stmt.executeUpdate();
-			return true;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-			
-		}
-		
-	}
+
 
 }

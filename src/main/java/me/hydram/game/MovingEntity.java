@@ -4,7 +4,7 @@ package me.hydram.game;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-
+//Klasse für jedes Wesen welches sich bewegen kann
 public class MovingEntity extends Entity{
 	
 	protected int moveDirection = 1;
@@ -16,6 +16,7 @@ public class MovingEntity extends Entity{
 	private long blockedTime;
 	private boolean isBlockedDirectionChange;
 	//true = no collision
+	//Setzt die isFrozen Variable, welche dazu genutz wird zu bestimmen, ob ein Wesen sich bewegen darf.
 	public void freeze(int duration)
 	{
 		frozenTime = System.currentTimeMillis();
@@ -37,7 +38,7 @@ public class MovingEntity extends Entity{
 		freezeTimer.start();
 		
 	}
-	
+	//Überprüft ob sich ein Wesen außerhalb des Spielfeldes befindet.
 	public boolean isOutOfMap()
 	{
 		Bounds bounds = this.getBoundsInParent();
@@ -45,11 +46,12 @@ public class MovingEntity extends Entity{
 
 	}
 	
-	
+	//Setzt die isFrozen Variable von true auf false, oder von false auf true
 	public void changeFreezeState()
 	{
 		isFrozen = !isFrozen;
 	}
+	//Gibt zurück ob ein Wesen mit einer der Wand Felder kollidiert.
 	protected boolean noCollision(double coord,int axis)//axis: 0=x 1=y
 	{	
 		for(int i = 0; i < Map.tiles1d.length;i++)
@@ -122,6 +124,7 @@ public class MovingEntity extends Entity{
 		return true;
 	}
 	
+	//gibt die entgegengesetzte Richtung zurück
 	protected int getOppositeDirection()
 	{
 		switch(moveDirection)
@@ -133,7 +136,7 @@ public class MovingEntity extends Entity{
 		}
 		return -1;
 	}
-	
+	//Setzt die nächste Richtung, in welche ein Wesen sich bewegen soll.
 	public void setNextMoveDirection(int next)
 	{
 			this.nextMveDirection = next;
@@ -145,7 +148,10 @@ public class MovingEntity extends Entity{
 	}
 	
 
-	
+	/*
+	 * Setzt die Richtung anhand der Variable nextMoveDirection, sobald dies möglich ist.
+	 * Rotiert die Textur des Wesens anhand der Bewegungsrichtung.
+	 */
 	public boolean move()
 	{
 		if(isFrozen)

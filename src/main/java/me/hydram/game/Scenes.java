@@ -28,7 +28,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import me.hydram.accounts.User;
-
+//Klasse für alle Szenen die das Spiel beinhaltet (Login/Register/Hauptmenü/Spielszene usw.)
 public class Scenes {
 	
 	final static private Font buttonFont = Font.font("Courier New",FontWeight.BOLD,25);

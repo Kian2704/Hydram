@@ -8,17 +8,25 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/*
+ * Klasse zur Kommunikation mit der Datenbank
+ */
+
+
 public class MySQLHandler {
 	
 	Connection connection;
 	Accounts account;
 	ExecutorService executor = Executors.newSingleThreadExecutor();
+	//Konstruktor
 	MySQLHandler(Accounts accounts)
 	{
 		this.connection = accounts.connection;
 		account = accounts;
 	}
-	
+	/*
+		Datenbankabfrage der eingegebenen Nutzerdaten, gibt den Nutzer zurück oder null wenn die Daten nicht übereinstimment
+	 */
 	protected User login(String username,String password)
 	{
 		String sql = "SELECT * FROM accounts WHERE username = ? AND password = ?"; 
@@ -46,7 +54,9 @@ public class MySQLHandler {
 			return null;
 		}
 	}
-	
+	/*
+	 * Datenbankabfrage zu der Verfügbarkeit eines Nutzernamen. true wenn verfügbar, sonst false
+	 */
 	protected boolean usernameAvailable(String username)
 	{
 		String sql = "SELECT * FROM accounts WHERE username = ?";
@@ -66,6 +76,9 @@ public class MySQLHandler {
 		}
 	}
 	
+	/*
+	 * Erstellt einen Datenbankeintrag für die eingegebenen Nutzerdaten-
+	 */
 	
 	protected boolean register(String username,String password)
 	{
@@ -91,6 +104,9 @@ public class MySQLHandler {
 		}
 	}
 	
+	/*
+	 * Aktualisiert die Nutzerdaten wie den Highscore oder das höchste erreichte LEvel
+	 */
 	protected void updateValues(User user)
 	{
 		

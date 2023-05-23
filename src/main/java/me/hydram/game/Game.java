@@ -49,6 +49,10 @@ public class Game {
 	{
 		return pacman;
 	}
+	public Pacman getPacman2()
+	{
+		return pacman2;
+	}
 	public int getScore()
 	{
 		return score;
@@ -309,6 +313,7 @@ public class Game {
 						e.printStackTrace();
 					}
 					pacman.enableControl(true);
+					pacman2.enableControl(true);
 			        
 			        AnimationTimer movement = new AnimationTimer() //Runs code in every Frame of the Game ~60fps
 			        		{
@@ -325,18 +330,7 @@ public class Game {
 			        		if(!isGameOver &&  !isPaused)
 			        		{
 			        			pacman.move();
-			        			pacman.move();//Only 3 times if Pc bad
-			        			pacman.move();
-			        			if(pacman.getDoubleSpeed())
-			        			{
-			        				pacman.move();
-				        			pacman.move();//Only 3 times if Pc bad
-				        			pacman.move();
-			        			}
-			        			for(int i = 0; i < pacman.velocity-1;i++)
-			        			{
-			        				pacman.move();
-			        			}
+			        			pacman2.move();
 			        			if(Main.random.nextInt(100) < 85)//Ghosts 15% slower than pacman
 			        			{
 			        				for(int i = 0; i < ghosts.length;i++)
@@ -355,6 +349,7 @@ public class Game {
 		{
 			mediaPlayer.stop();
 		}
+		Pacman.resetPacmans();
 		Ghost.numberGhosts = 0;
 		Main.currentGame = null;
 		boolean won = (pointsLeft == 0 && remainingLives > 0);
@@ -389,6 +384,7 @@ public class Game {
 		initializeEntities();
 		play();
 		liveCounter.update(remainingLives);
+		Debug.printPacmans();
 		
 	}
 	

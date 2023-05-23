@@ -1,5 +1,8 @@
 package me.hydram.accounts;
 
+
+
+//Klasse welche Daten über den Nutzer enthält
 public class User {
 	String username;
 	String uuid;
@@ -21,7 +24,9 @@ public class User {
 	}
 	
 	
-	
+	/*
+	 * Getter Methoden
+	 */
 	
 	public String getUsername()
 	{
@@ -48,6 +53,8 @@ public class User {
 		return highestLevel;
 	}
 	
+	
+	//Erhöht das Level des Nutzers
 	public int increaseLevel()
 	{
 		currentLevel++;
@@ -59,17 +66,20 @@ public class User {
 		return currentLevel;
 	}
 	
+	//Setzt das aktuelle Level zurück auf 1
 	public void resetLevel()
 	{
 		currentLevel = 1;
 		handler.updateValues(this);
 	}
 	
+	//Setzt den Highscore auf den aktuellen höchsten Punktestand
 	public void setHighscore(int newHighscore)
 	{
 		highscore = newHighscore;
 		handler.updateValues(this);
 	}
+	//Setzt das höchste Level auf das aktuelle Level
 	public void setHighestLevel(int newLevel)
 	{	
 		highestLevel = newLevel;

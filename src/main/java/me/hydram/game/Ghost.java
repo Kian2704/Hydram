@@ -123,7 +123,7 @@ public class Ghost extends MovingEntity {
 					foundDest = true;
 					return getPath(cellDetails,tile);
 					
-				}else if(closedList[i-1][j] == false && Map.tiles[i-1][j].type != 0 && Map.tiles[i-1][j].type != 5 )
+				}else if(closedList[i-1][j] == false && Map.tiles[i-1][j].type != 0 && Map.tiles[i-1][j].type != 5 && Map.tiles[i-1][j].type != 7 )
 				{
 					gNew = cellDetails[i][j].g + 1.0;
 	                hNew = Vec2.getMHDistance(new Vec2(i-1,j),tile);
@@ -156,7 +156,7 @@ public class Ghost extends MovingEntity {
 					foundDest = true;
 					return getPath(cellDetails,tile);
 					
-				}else if(closedList[i+1][j] == false && Map.tiles[i+1][j].type != 0 && Map.tiles[i+1][j].type != 5 )
+				}else if(closedList[i+1][j] == false && Map.tiles[i+1][j].type != 0 && Map.tiles[i+1][j].type != 5 && Map.tiles[i-1][j].type != 7 )
 				{
 					gNew = cellDetails[i][j].g + 1.0;
 	                hNew = Vec2.getMHDistance(new Vec2(i+1,j),tile);
@@ -187,7 +187,7 @@ public class Ghost extends MovingEntity {
 					foundDest = true;
 					return getPath(cellDetails,tile);
 					
-				}else if(closedList[i][j+1] == false && Map.tiles[i][j+1].type != 0 && Map.tiles[i][j+1].type != 5 )
+				}else if(closedList[i][j+1] == false && Map.tiles[i][j+1].type != 0 && Map.tiles[i][j+1].type != 5 && Map.tiles[i-1][j].type != 7 )
 				{
 					gNew = cellDetails[i][j].g + 1.0;
 	                hNew = Vec2.getMHDistance(new Vec2(i,j+1),tile);
@@ -217,7 +217,7 @@ public class Ghost extends MovingEntity {
 					foundDest = true;
 					return getPath(cellDetails,tile);
 					
-				}else if(closedList[i][j-1] == false && Map.tiles[i][j-1].type != 0 && Map.tiles[i][j-1].type != 5 )
+				}else if(closedList[i][j-1] == false && Map.tiles[i][j-1].type != 0 && Map.tiles[i][j-1].type != 5 && Map.tiles[i-1][j].type != 7 )
 				{
 					gNew = cellDetails[i][j].g + 1.0;
 	                hNew = Vec2.getMHDistance(new Vec2(i,j-1),tile);

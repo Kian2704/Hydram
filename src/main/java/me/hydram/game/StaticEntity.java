@@ -1,5 +1,5 @@
 package me.hydram.game;
-
+//Überklasse für alle Wesen welche sich nicht bewegen können.
 public class StaticEntity extends Entity {
 
 	protected StaticEntity()

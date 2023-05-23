@@ -42,11 +42,13 @@ public class Debug extends Game {
 			}
 		});
 	}	
-	public static void mapCreator(Pane gameScene)
+	public static void printPacmans()
 	{
 		gameScene.setOnKeyPressed(e -> {
 		    if (e.getCode() == KeyCode.A) {
-		        System.out.println("The 'A' key was pressed");
+		        System.out.println(Main.currentGame.getPacman().getLayoutX());
+		        System.out.println(Main.currentGame.getPacman2().getLayoutX());
+		        
 		    }
 		});
 	}
