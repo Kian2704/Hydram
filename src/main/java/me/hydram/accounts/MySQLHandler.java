@@ -49,7 +49,6 @@ public class MySQLHandler {
 			return new User(username,uuid,highscore,highestLevel,currentLevel,isDeveloper,this);
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
