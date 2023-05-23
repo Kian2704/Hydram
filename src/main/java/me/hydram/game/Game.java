@@ -9,7 +9,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import me.hydram.accounts.User;
 
-/*Führt Spiel Logik aus*/
+//TODO comment
 
 public class Game {
 
@@ -209,9 +209,11 @@ public class Game {
 
     //wenn Punkt verspeist wird
     public void collectPoint(Tile tile) {
+        //überprüft ob der punkt ein powerup war
         if ((tile.getEnt() != null) && tile.getEnt().type == 4) {
             Powerup();
         }
+        //speilt verspeisen Ton, wenn das Feld ein Punkt ist
         if ((tile.getEnt() != null) && (tile.getEnt().type == 3 || tile.getEnt().type == 4)) {
             MediaPlayer nomPlayer;
             Media sound;
@@ -222,41 +224,38 @@ public class Game {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
+            //erhöht Punktestand
             score += 10;
             updateScore();
-            for (int i = 0; i < 200; i++) {
-
-            }
+            for (int i = 0; i < 200; i++) {/* why is this here */}
+            //aktualisiert points left
             pointsLeft--;
             tile.removeEnt();
-            checkWin();
 
+            checkWin();
         }
     }
 
-
+    //initialisiert Wesen
     private void initializeEntities() {
+        //Initialisiert pacman(s)
         pacman = new Pacman();
         if (Main.enableMultiplayer == true)
             this.pacman2 = new Pacman();
+
+        //Initialisiert Geister
         ghosts = new Ghost[numberGhosts];
-
-
         for (int i = 0; i < ghosts.length; i++) {
             ghosts[i] = new Ghost();
             gameScene.getChildren().add(ghosts[i]);
         }
 
-
         Debug.entityDebugEventHandler(pacman);
         gameScene.getChildren().add(pacman);
-
-
     }
 
     private void play() {
+        //spielt Hintergrundmusik
         Media sound;
         try {
             sound = new Media(getClass().getResource("sound/background.mp3").toString());
@@ -270,7 +269,6 @@ public class Game {
                 public void run() {
                     mediaPlayer.seek(Duration.ZERO);
                     mediaPlayer.play();
-
                 }
 
             });
@@ -290,7 +288,7 @@ public class Game {
         AnimationTimer movement = new AnimationTimer() //Runs code in every Frame of the Game ~60fps
         {
 
-
+            //Führt gameplay aus
             public void handle(long now) {
 
                 if (isGameOver) {
@@ -314,7 +312,9 @@ public class Game {
         movement.start();
     }
 
+    //Beendet Spiel
     public void stopGame() {
+        //beendet abspielen von Tönen
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }
@@ -329,6 +329,7 @@ public class Game {
 
         Scenes.setGameOverScene(score, won);
         User user = Main.getAccounts().getUser();
+        //speichert ggf neuen highscore
         if (user.getHighscore() < score)
             user.setHighscore(score);
 
@@ -341,6 +342,7 @@ public class Game {
         }
     }
 
+    //Macht Spiel startbereit
     public Game() {
         initializeImages();
         this.startScore = score;
@@ -354,6 +356,7 @@ public class Game {
 
     }
 
+    //Initialisiert Bilder
     private void initializeImages() {
         pointTexture = Graphics.getPointTexture();
         powerUpTexture = Graphics.getPowerUpTexture();
