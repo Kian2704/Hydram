@@ -9,7 +9,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import me.hydram.accounts.User;
 
-//TODO comment
+/*führt gameloop aus*/
 
 public class Game {
 
