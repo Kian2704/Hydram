@@ -245,7 +245,7 @@ public class Scenes {
 	       	 
             @Override
             public void handle(ActionEvent event) {
-            	Main.currentGame.stopGame();//TODO should save game
+            	Main.currentGame.stopGame();
             	setMainMenuScene();
             	
             }
