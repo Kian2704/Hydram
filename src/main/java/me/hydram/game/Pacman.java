@@ -29,7 +29,7 @@ public class Pacman extends MovingEntity {
 				
 	}
 	
-	//setzt die spielerzahl zurück auf 0
+	//setzt die Spielerzahl zurück auf 0
 	public static void resetPacmans()
 	{
 		numberPlayers = 0;
